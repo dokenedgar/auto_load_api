@@ -60,18 +60,23 @@ class _ApiListState extends State<ApiList> {
 
   Future<void> fetch() async {
     final Response response = await get('https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=50');
-    if (response.statusCode == 200) {
-      print('OK');
-      final Map<String, dynamic> decodedData = json.decode(response.body);
-      final List<Map<String, dynamic>> movies = List<Map<String, dynamic>>.from(decodedData['data']['movies']);
 
-      setState(() {
-        for (Map<String, dynamic> film in movies) {
-          final Movie movie = Movie.fromJson(film);
-          films.add(movie);
-        }
-      });
-    } else {
+    try {
+      if (response.statusCode == 200) {
+        print('OK');
+        final Map<String, dynamic> decodedData = json.decode(response.body);
+        final List<Map<String, dynamic>> movies = List<Map<String, dynamic>>.from(decodedData['data']['movies']);
+
+        setState(() {
+          for (Map<String, dynamic> film in movies) {
+            final Movie movie = Movie.fromJson(film);
+            films.add(movie);
+          }
+        });
+      } else {
+        setState(() => error = true);
+      }
+    } catch (e) {
       setState(() => error = true);
     }
 
