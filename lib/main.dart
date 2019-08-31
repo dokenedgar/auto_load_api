@@ -1,7 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+
+import 'movie.dart';
+
+// todo dive deep into async/await
 
 void main() => runApp(BaseWidget());
 
@@ -21,38 +25,59 @@ class ApiList extends StatefulWidget {
 }
 
 class _ApiListState extends State<ApiList> {
-  List<String> films = List<String>();
+  List<Movie> films = <Movie>[];
+
   final ScrollController _scrollController = ScrollController();
-  int pageNumber = 1;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int pageNumber = 1;
+  bool isLoading = true;
+  bool error = false;
 
   @override
   void initState() {
     super.initState();
 
     fetch();
-    _scrollController.addListener(
-      () {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          // get more movie titles
-          /* _scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Row(
-              children: const <Widget>[
-                CircularProgressIndicator(),
-                Text('  Loading...')
-              ],
-            ),
-          ));
-          */
-          setState(() {
-            pageNumber++;
-          });
-          print('get page $pageNumber');
-          fetch();
+    _scrollController.addListener(_onScrollChanged);
+  }
+
+  void _onScrollChanged() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      setState(() {
+        pageNumber++;
+        isLoading = true;
+      });
+      print('get page $pageNumber');
+
+      WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.bounceInOut));
+
+      fetch();
+    }
+  }
+
+  Future<void> fetch() async {
+    final Response response = await get('https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=50');
+    if (response.statusCode == 200) {
+      print('OK');
+      final Map<String, dynamic> decodedData = json.decode(response.body);
+      final List<Map<String, dynamic>> movies = List<Map<String, dynamic>>.from(decodedData['data']['movies']);
+
+      setState(() {
+        for (Map<String, dynamic> film in movies) {
+          final Movie movie = Movie.fromJson(film);
+          films.add(movie);
         }
-      },
-    );
+      });
+    } else {
+      setState(() => error = true);
+    }
+
+    if (mounted) {
+      setState(() => isLoading = false);
+    }
   }
 
   @override
@@ -67,37 +92,42 @@ class _ApiListState extends State<ApiList> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('Get Data From An API'),
+        actions: <Widget>[
+          if (error)
+            IconButton(
+              icon: Icon(
+                Icons.error_outline,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                setState(() {
+                  error = false;
+                  isLoading = true;
+                });
+                fetch();
+              },
+            ),
+        ],
       ),
       body: ListView.builder(
         controller: _scrollController,
         itemCount: films.length,
-        itemBuilder: (BuildContext context, int index) => ListTile(
-          title:
-              films.isEmpty ? const Text('Loading') : Text('${films[index]}'),
-        ),
+        padding: const EdgeInsetsDirectional.only(bottom: 24.0),
+        itemBuilder: (BuildContext context, int index) {
+          final Movie movie = films[index];
+
+          return Column(
+            children: <Widget>[
+              ListTile(
+                leading: Image.network(movie.image),
+                title: films.isEmpty ? const Text('Loading') : Text(movie.title),
+                subtitle: Text(movie.summary),
+              ),
+              if (isLoading && index == films.length - 1) const CircularProgressIndicator()
+            ],
+          );
+        },
       ),
     );
-  }
-
-  Future<void> fetch() async {
-    final response = await http.get(
-        'https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=50');
-    if (response.statusCode == 200) {
-      print('OK');
-      final Map<String, dynamic> decodedData = json.decode(response.body);
-      final List<dynamic> movies = decodedData['data']['movies'];
-      // movies.forEach(( dynamic movie) => print(movie['title']));
-
-      for (dynamic film in movies) {
-        setState(
-          () {
-            films.add(film['title']);
-          },
-        );
-      }
-    } else {
-      print('NOT OKAY');
-    }
-    return;
   }
 }
