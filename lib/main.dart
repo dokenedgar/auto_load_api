@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:auto_load_api/route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import 'movie.dart';
+import 'router.dart' as router;
 
 // todo dive deep into async/await
 
@@ -14,7 +16,9 @@ class BaseWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ApiList(),
+      //home: ApiList(),
+      onGenerateRoute: router.generateRoute,
+      initialRoute: HomeRoute,
     );
   }
 }
@@ -42,30 +46,33 @@ class _ApiListState extends State<ApiList> {
   }
 
   void _onScrollChanged() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       setState(() {
         pageNumber++;
         isLoading = true;
       });
       print('get page $pageNumber');
 
-      WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.bounceInOut));
+      WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController
+          .animateTo(_scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.bounceInOut));
 
       fetch();
     }
   }
 
   Future<void> fetch() async {
-    final Response response = await get('https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=50');
+    final Response response = await get(
+        'https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=50');
 
     try {
       if (response.statusCode == 200) {
         print('OK');
         final Map<String, dynamic> decodedData = json.decode(response.body);
-        final List<Map<String, dynamic>> movies = List<Map<String, dynamic>>.from(decodedData['data']['movies']);
+        final List<Map<String, dynamic>> movies =
+            List<Map<String, dynamic>>.from(decodedData['data']['movies']);
 
         setState(() {
           for (Map<String, dynamic> film in movies) {
@@ -114,7 +121,7 @@ class _ApiListState extends State<ApiList> {
             ),
         ],
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         controller: _scrollController,
         itemCount: films.length,
         padding: const EdgeInsetsDirectional.only(bottom: 24.0),
@@ -124,14 +131,27 @@ class _ApiListState extends State<ApiList> {
           return Column(
             children: <Widget>[
               ListTile(
-                leading: Image.network(movie.image),
-                title: films.isEmpty ? const Text('Loading') : Text(movie.title),
-                subtitle: Text(movie.summary),
-              ),
-              if (isLoading && index == films.length - 1) const CircularProgressIndicator()
+                  leading: Image.network(
+                    movie.image,
+                    filterQuality: FilterQuality.medium,
+                  ),
+                  title:
+                      films.isEmpty ? const Text('Loading') : Text(movie.title),
+                  subtitle: Text(
+                    movie.summary,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onTap: () => Navigator.pushNamed(context, MovieDetailRoute,
+                      arguments: movie)),
+              if (isLoading && index == films.length - 1)
+                const CircularProgressIndicator()
             ],
           );
         },
+        separatorBuilder: (context, index) => Divider(
+          color: Colors.black,
+        ),
       ),
     );
   }
