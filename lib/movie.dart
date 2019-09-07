@@ -14,7 +14,8 @@ part 'movie.g.dart';
 abstract class Movie implements Built<Movie, MovieBuilder> {
   factory Movie([void updates(MovieBuilder b)]) = _$Movie;
 
-  factory Movie.fromJson(Map<dynamic, dynamic> json) => serializers.deserializeWith(serializer, json);
+  factory Movie.fromJson(Map<dynamic, dynamic> json) =>
+      serializers.deserializeWith(serializer, json);
 
   Movie._();
 
@@ -24,6 +25,14 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
   String get image;
 
   String get summary;
+
+  int get year;
+
+  int get runtime;
+
+  double get rating;
+
+  //BuiltList get genres;
 
   @memoized
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this);

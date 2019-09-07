@@ -27,6 +27,13 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       'summary',
       serializers.serialize(object.summary,
           specifiedType: const FullType(String)),
+      'year',
+      serializers.serialize(object.year, specifiedType: const FullType(int)),
+      'runtime',
+      serializers.serialize(object.runtime, specifiedType: const FullType(int)),
+      'rating',
+      serializers.serialize(object.rating,
+          specifiedType: const FullType(double)),
     ];
 
     return result;
@@ -55,6 +62,18 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           result.summary = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'year':
+          result.year = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'runtime':
+          result.runtime = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'rating':
+          result.rating = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
+          break;
       }
     }
 
@@ -69,12 +88,25 @@ class _$Movie extends Movie {
   final String image;
   @override
   final String summary;
+  @override
+  final int year;
+  @override
+  final int runtime;
+  @override
+  final double rating;
   Map<String, dynamic> __json;
 
   factory _$Movie([void Function(MovieBuilder) updates]) =>
       (new MovieBuilder()..update(updates)).build();
 
-  _$Movie._({this.title, this.image, this.summary}) : super._() {
+  _$Movie._(
+      {this.title,
+      this.image,
+      this.summary,
+      this.year,
+      this.runtime,
+      this.rating})
+      : super._() {
     if (title == null) {
       throw new BuiltValueNullFieldError('Movie', 'title');
     }
@@ -83,6 +115,15 @@ class _$Movie extends Movie {
     }
     if (summary == null) {
       throw new BuiltValueNullFieldError('Movie', 'summary');
+    }
+    if (year == null) {
+      throw new BuiltValueNullFieldError('Movie', 'year');
+    }
+    if (runtime == null) {
+      throw new BuiltValueNullFieldError('Movie', 'runtime');
+    }
+    if (rating == null) {
+      throw new BuiltValueNullFieldError('Movie', 'rating');
     }
   }
 
@@ -102,13 +143,22 @@ class _$Movie extends Movie {
     return other is Movie &&
         title == other.title &&
         image == other.image &&
-        summary == other.summary;
+        summary == other.summary &&
+        year == other.year &&
+        runtime == other.runtime &&
+        rating == other.rating;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, title.hashCode), image.hashCode), summary.hashCode));
+    return $jf($jc(
+        $jc(
+            $jc(
+                $jc($jc($jc(0, title.hashCode), image.hashCode),
+                    summary.hashCode),
+                year.hashCode),
+            runtime.hashCode),
+        rating.hashCode));
   }
 
   @override
@@ -116,7 +166,10 @@ class _$Movie extends Movie {
     return (newBuiltValueToStringHelper('Movie')
           ..add('title', title)
           ..add('image', image)
-          ..add('summary', summary))
+          ..add('summary', summary)
+          ..add('year', year)
+          ..add('runtime', runtime)
+          ..add('rating', rating))
         .toString();
   }
 }
@@ -136,6 +189,18 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
   String get summary => _$this._summary;
   set summary(String summary) => _$this._summary = summary;
 
+  int _year;
+  int get year => _$this._year;
+  set year(int year) => _$this._year = year;
+
+  int _runtime;
+  int get runtime => _$this._runtime;
+  set runtime(int runtime) => _$this._runtime = runtime;
+
+  double _rating;
+  double get rating => _$this._rating;
+  set rating(double rating) => _$this._rating = rating;
+
   MovieBuilder();
 
   MovieBuilder get _$this {
@@ -143,6 +208,9 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
       _title = _$v.title;
       _image = _$v.image;
       _summary = _$v.summary;
+      _year = _$v.year;
+      _runtime = _$v.runtime;
+      _rating = _$v.rating;
       _$v = null;
     }
     return this;
@@ -163,8 +231,14 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
 
   @override
   _$Movie build() {
-    final _$result =
-        _$v ?? new _$Movie._(title: title, image: image, summary: summary);
+    final _$result = _$v ??
+        new _$Movie._(
+            title: title,
+            image: image,
+            summary: summary,
+            year: year,
+            runtime: runtime,
+            rating: rating);
     replace(_$result);
     return _$result;
   }

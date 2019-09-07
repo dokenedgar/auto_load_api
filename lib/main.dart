@@ -78,6 +78,7 @@ class _ApiListState extends State<ApiList> {
           for (Map<String, dynamic> film in movies) {
             final Movie movie = Movie.fromJson(film);
             films.add(movie);
+            // print(movie);
           }
         });
       } else {
@@ -135,12 +136,21 @@ class _ApiListState extends State<ApiList> {
                     movie.image,
                     filterQuality: FilterQuality.medium,
                   ),
-                  title:
-                      films.isEmpty ? const Text('Loading') : Text(movie.title),
+                  title: films.isEmpty
+                      ? const Text('Loading')
+                      : Text(
+                          movie.title,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
                   subtitle: Text(
                     movie.summary,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 15.0),
+                  ),
+                  trailing: Text(
+                    'Rating\n${movie.rating.toString()}',
+                    textAlign: TextAlign.center,
                   ),
                   onTap: () => Navigator.pushNamed(context, MovieDetailRoute,
                       arguments: movie)),
@@ -149,7 +159,7 @@ class _ApiListState extends State<ApiList> {
             ],
           );
         },
-        separatorBuilder: (context, index) => Divider(
+        separatorBuilder: (BuildContext context, int index) => Divider(
           color: Colors.black,
         ),
       ),

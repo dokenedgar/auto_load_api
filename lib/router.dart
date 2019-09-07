@@ -8,13 +8,16 @@ import 'movie.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case HomeRoute:
-      return MaterialPageRoute(builder: (context) => ApiList());
+      return MaterialPageRoute(builder: (BuildContext context) => ApiList());
 
     case MovieDetailRoute:
-      Movie movie = settings.arguments;
+      final Movie movie = settings.arguments;
       return MaterialPageRoute(
-          builder: (context) => MovieDetail(
+          builder: (BuildContext context) => MovieDetail(
                 movie: movie,
               ));
+
+    default:
+      return MaterialPageRoute(builder: (BuildContext context) => ApiList());
   }
 }
