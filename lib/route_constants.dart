@@ -1,2 +1,4 @@
-const String HomeRoute = '/';
-const String MovieDetailRoute = '/movieDetail';
+class AppRoutes {
+  static const String homeRoute = '/';
+  static const String movieDetailRoute = '/movieDetail';
+}

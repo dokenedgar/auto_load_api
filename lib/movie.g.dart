@@ -34,6 +34,10 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       'rating',
       serializers.serialize(object.rating,
           specifiedType: const FullType(double)),
+      'genres',
+      serializers.serialize(object.genres,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(String)])),
     ];
 
     return result;
@@ -74,6 +78,12 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           result.rating = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
           break;
+        case 'genres':
+          result.genres.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
+              as BuiltList<dynamic>);
+          break;
       }
     }
 
@@ -94,6 +104,8 @@ class _$Movie extends Movie {
   final int runtime;
   @override
   final double rating;
+  @override
+  final BuiltList<String> genres;
   Map<String, dynamic> __json;
 
   factory _$Movie([void Function(MovieBuilder) updates]) =>
@@ -105,7 +117,8 @@ class _$Movie extends Movie {
       this.summary,
       this.year,
       this.runtime,
-      this.rating})
+      this.rating,
+      this.genres})
       : super._() {
     if (title == null) {
       throw new BuiltValueNullFieldError('Movie', 'title');
@@ -124,6 +137,9 @@ class _$Movie extends Movie {
     }
     if (rating == null) {
       throw new BuiltValueNullFieldError('Movie', 'rating');
+    }
+    if (genres == null) {
+      throw new BuiltValueNullFieldError('Movie', 'genres');
     }
   }
 
@@ -146,7 +162,8 @@ class _$Movie extends Movie {
         summary == other.summary &&
         year == other.year &&
         runtime == other.runtime &&
-        rating == other.rating;
+        rating == other.rating &&
+        genres == other.genres;
   }
 
   @override
@@ -154,11 +171,13 @@ class _$Movie extends Movie {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, title.hashCode), image.hashCode),
-                    summary.hashCode),
-                year.hashCode),
-            runtime.hashCode),
-        rating.hashCode));
+                $jc(
+                    $jc($jc($jc(0, title.hashCode), image.hashCode),
+                        summary.hashCode),
+                    year.hashCode),
+                runtime.hashCode),
+            rating.hashCode),
+        genres.hashCode));
   }
 
   @override
@@ -169,7 +188,8 @@ class _$Movie extends Movie {
           ..add('summary', summary)
           ..add('year', year)
           ..add('runtime', runtime)
-          ..add('rating', rating))
+          ..add('rating', rating)
+          ..add('genres', genres))
         .toString();
   }
 }
@@ -201,6 +221,11 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
   double get rating => _$this._rating;
   set rating(double rating) => _$this._rating = rating;
 
+  ListBuilder<String> _genres;
+  ListBuilder<String> get genres =>
+      _$this._genres ??= new ListBuilder<String>();
+  set genres(ListBuilder<String> genres) => _$this._genres = genres;
+
   MovieBuilder();
 
   MovieBuilder get _$this {
@@ -211,6 +236,7 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
       _year = _$v.year;
       _runtime = _$v.runtime;
       _rating = _$v.rating;
+      _genres = _$v.genres?.toBuilder();
       _$v = null;
     }
     return this;
@@ -231,14 +257,28 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
 
   @override
   _$Movie build() {
-    final _$result = _$v ??
-        new _$Movie._(
-            title: title,
-            image: image,
-            summary: summary,
-            year: year,
-            runtime: runtime,
-            rating: rating);
+    _$Movie _$result;
+    try {
+      _$result = _$v ??
+          new _$Movie._(
+              title: title,
+              image: image,
+              summary: summary,
+              year: year,
+              runtime: runtime,
+              rating: rating,
+              genres: genres.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'genres';
+        genres.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Movie', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

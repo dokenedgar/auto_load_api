@@ -4,6 +4,7 @@
 
 library movie;
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -34,7 +35,7 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   double get rating;
 
-  //BuiltList get genres;
+  BuiltList<String> get genres;
 
   @memoized
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this);

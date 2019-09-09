@@ -18,7 +18,7 @@ class BaseWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       //home: ApiList(),
       onGenerateRoute: router.generateRoute,
-      initialRoute: HomeRoute,
+      initialRoute: AppRoutes.homeRoute,
     );
   }
 }
@@ -152,7 +152,8 @@ class _ApiListState extends State<ApiList> {
                     'Rating\n${movie.rating.toString()}',
                     textAlign: TextAlign.center,
                   ),
-                  onTap: () => Navigator.pushNamed(context, MovieDetailRoute,
+                  onTap: () => Navigator.pushNamed(
+                      context, AppRoutes.movieDetailRoute,
                       arguments: movie)),
               if (isLoading && index == films.length - 1)
                 const CircularProgressIndicator()

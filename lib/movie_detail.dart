@@ -27,28 +27,32 @@ class MovieDetail extends StatelessWidget {
                       style: TextStyle(fontSize: 25.0),
                       textAlign: TextAlign.center,
                     ),
+                    Wrap(
+                      children: movie.genres
+                          .map((genre) => Chip(
+                                label: Text(genre),
+                              ))
+                          .toList(),
+                    ),
                     Divider(
                       color: Colors.black,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(child: Text('Year: ${movie.year}')),
-                        VerticalDivider(
-                          color: Colors.black,
-                        ),
-                        Expanded(
-                            flex: 2,
-                            child: Text('Running Time: ${movie.runtime} mins')),
-                        VerticalDivider(
-                          color: Colors.black,
-                        ),
-                        Expanded(
-                          child: Text('${movie.rating}/10'),
-                        ),
-                        VerticalDivider(
-                          color: Colors.black,
-                        ),
-                      ],
+                    Container(
+                      height: 30.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text('Year: ${movie.year}'),
+                          VerticalDivider(
+                            color: Colors.black,
+                          ),
+                          Text('Running Time: ${movie.runtime} mins'),
+                          VerticalDivider(
+                            color: Colors.black,
+                          ),
+                          Text('${movie.rating}/10'),
+                        ],
+                      ),
                     ),
                     Divider(
                       color: Colors.black,
