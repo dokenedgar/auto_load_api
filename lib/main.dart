@@ -78,7 +78,7 @@ class _ApiListState extends State<ApiList> {
           for (Map<String, dynamic> film in movies) {
             final Movie movie = Movie.fromJson(film);
             films.add(movie);
-            // print(movie);
+            //print(film);
           }
         });
       } else {
@@ -122,6 +122,7 @@ class _ApiListState extends State<ApiList> {
             ),
         ],
       ),
+      /*
       body: ListView.separated(
         controller: _scrollController,
         itemCount: films.length,
@@ -163,6 +164,59 @@ class _ApiListState extends State<ApiList> {
         separatorBuilder: (BuildContext context, int index) => Divider(
           color: Colors.black,
         ),
+      ),
+      */
+      body: GridView.count(
+        controller: _scrollController,
+        padding: EdgeInsets.all(4.0),
+        //mainAxisSpacing: 2.0,
+        //crossAxisSpacing: 2.0,
+        crossAxisCount: 2,
+        childAspectRatio: 4.0 / 6.0,
+        children: films
+            .map(
+              (film) => InkWell(
+                onTap: () => Navigator.pushNamed(
+                    context, AppRoutes.movieDetailRoute,
+                    arguments: film),
+                child: Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Image.network(
+                        film.image,
+                        height: 200.0,
+                        fit: BoxFit.fitWidth,
+                        //scale: 0.5,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            film.title,
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Wrap(
+                            children: film.genres
+                                .map((genre) => Text('$genre, '))
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  elevation: 2.0,
+                  margin: EdgeInsets.all(5.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+
+              //child: Text(quote.value),
+            )
+            .toList(),
       ),
     );
   }

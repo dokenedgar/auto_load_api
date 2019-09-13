@@ -1,4 +1,5 @@
 import 'package:auto_load_api/movie.dart';
+import 'package:auto_load_api/route_constants.dart';
 import 'package:flutter/material.dart';
 
 class MovieDetail extends StatelessWidget {
@@ -9,7 +10,7 @@ class MovieDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Movie Detail'),
+          title: Text(movie.title),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -30,10 +31,12 @@ class MovieDetail extends StatelessWidget {
                     Wrap(
                       children: movie.genres
                           .map((genre) => Chip(
+                                backgroundColor: Colors.amber,
                                 label: Text(genre),
                               ))
                           .toList(),
                     ),
+                    Text('Language: ${movie.language}'),
                     Divider(
                       color: Colors.black,
                     ),
@@ -61,11 +64,42 @@ class MovieDetail extends StatelessWidget {
                       movie.summary,
                       style: TextStyle(fontSize: 15.0),
                     ),
+                    (movie.trailerId.length > 3)
+                        ? showTrailer(context, true)
+                        : showTrailer(context, false),
                   ],
                 ),
               ),
             ),
           ),
         ));
+  }
+
+  Widget showTrailer(BuildContext context, bool hasTrailer) {
+    if (hasTrailer) {
+      return RaisedButton(
+        onPressed: () => Navigator.pushNamed(
+          context,
+          AppRoutes.movieTrailer,
+          arguments: movie.trailerId,
+        ), //print(movie.yt_trailer_code),
+        child: Text(
+          'WATCH TRAILER',
+          style: TextStyle(),
+        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      );
+    }
+    return Center(
+      child: Text(
+        'NO TRAILER AVAILABLE YET...',
+        style: TextStyle(
+          color: Colors.red,
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0,
+        ),
+      ),
+    );
   }
 }

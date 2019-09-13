@@ -34,6 +34,12 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       'rating',
       serializers.serialize(object.rating,
           specifiedType: const FullType(double)),
+      'language',
+      serializers.serialize(object.language,
+          specifiedType: const FullType(String)),
+      'yt_trailer_code',
+      serializers.serialize(object.trailerId,
+          specifiedType: const FullType(String)),
       'genres',
       serializers.serialize(object.genres,
           specifiedType:
@@ -78,6 +84,14 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           result.rating = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
           break;
+        case 'language':
+          result.language = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'yt_trailer_code':
+          result.trailerId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'genres':
           result.genres.replace(serializers.deserialize(value,
                   specifiedType:
@@ -105,6 +119,10 @@ class _$Movie extends Movie {
   @override
   final double rating;
   @override
+  final String language;
+  @override
+  final String trailerId;
+  @override
   final BuiltList<String> genres;
   Map<String, dynamic> __json;
 
@@ -118,6 +136,8 @@ class _$Movie extends Movie {
       this.year,
       this.runtime,
       this.rating,
+      this.language,
+      this.trailerId,
       this.genres})
       : super._() {
     if (title == null) {
@@ -137,6 +157,12 @@ class _$Movie extends Movie {
     }
     if (rating == null) {
       throw new BuiltValueNullFieldError('Movie', 'rating');
+    }
+    if (language == null) {
+      throw new BuiltValueNullFieldError('Movie', 'language');
+    }
+    if (trailerId == null) {
+      throw new BuiltValueNullFieldError('Movie', 'trailerId');
     }
     if (genres == null) {
       throw new BuiltValueNullFieldError('Movie', 'genres');
@@ -163,6 +189,8 @@ class _$Movie extends Movie {
         year == other.year &&
         runtime == other.runtime &&
         rating == other.rating &&
+        language == other.language &&
+        trailerId == other.trailerId &&
         genres == other.genres;
   }
 
@@ -172,11 +200,15 @@ class _$Movie extends Movie {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, title.hashCode), image.hashCode),
-                        summary.hashCode),
-                    year.hashCode),
-                runtime.hashCode),
-            rating.hashCode),
+                    $jc(
+                        $jc(
+                            $jc($jc($jc(0, title.hashCode), image.hashCode),
+                                summary.hashCode),
+                            year.hashCode),
+                        runtime.hashCode),
+                    rating.hashCode),
+                language.hashCode),
+            trailerId.hashCode),
         genres.hashCode));
   }
 
@@ -189,6 +221,8 @@ class _$Movie extends Movie {
           ..add('year', year)
           ..add('runtime', runtime)
           ..add('rating', rating)
+          ..add('language', language)
+          ..add('trailerId', trailerId)
           ..add('genres', genres))
         .toString();
   }
@@ -221,6 +255,14 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
   double get rating => _$this._rating;
   set rating(double rating) => _$this._rating = rating;
 
+  String _language;
+  String get language => _$this._language;
+  set language(String language) => _$this._language = language;
+
+  String _trailerId;
+  String get trailerId => _$this._trailerId;
+  set trailerId(String trailerId) => _$this._trailerId = trailerId;
+
   ListBuilder<String> _genres;
   ListBuilder<String> get genres =>
       _$this._genres ??= new ListBuilder<String>();
@@ -236,6 +278,8 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
       _year = _$v.year;
       _runtime = _$v.runtime;
       _rating = _$v.rating;
+      _language = _$v.language;
+      _trailerId = _$v.trailerId;
       _genres = _$v.genres?.toBuilder();
       _$v = null;
     }
@@ -267,6 +311,8 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
               year: year,
               runtime: runtime,
               rating: rating,
+              language: language,
+              trailerId: trailerId,
               genres: genres.build());
     } catch (_) {
       String _$failedField;

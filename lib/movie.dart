@@ -16,7 +16,11 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
   factory Movie([void updates(MovieBuilder b)]) = _$Movie;
 
   factory Movie.fromJson(Map<dynamic, dynamic> json) {
-    print(json['genres']);
+    print(json['torrents'].map((dynamic torrent) {
+      print(torrent);
+    }));
+
+    //[0]['seeds'].runtimeType);
     return serializers.deserializeWith(serializer, json);
   }
 
@@ -35,7 +39,14 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   double get rating;
 
+  String get language;
+
+  @BuiltValueField(wireName: 'yt_trailer_code')
+  String get trailerId;
+
   BuiltList<String> get genres;
+
+  //BuiltList<Map<dynamic, dynamic>> get torrents;
 
   @memoized
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this);
