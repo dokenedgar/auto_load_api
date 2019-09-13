@@ -33,8 +33,13 @@ class MovieDetail extends StatelessWidget {
                     Wrap(
                       children: movie.genres
                           .map((String genre) => Chip(
-                                backgroundColor: Colors.amber,
-                                label: Text(genre),
+                                backgroundColor: Theme.of(context).primaryColor,
+                                label: Text(
+                                  genre,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ))
                           .toList(),
                     ),
@@ -92,6 +97,8 @@ class MovieDetail extends StatelessWidget {
   Widget showTrailer(BuildContext context, bool hasTrailer) {
     if (hasTrailer) {
       return RaisedButton(
+        color: Theme.of(context).primaryColor,
+        textColor: Colors.white,
         onPressed: () => Navigator.pushNamed(
           context,
           AppRoutes.movieTrailer,
@@ -99,19 +106,21 @@ class MovieDetail extends StatelessWidget {
         ), //print(movie.yt_trailer_code),
         child: Text(
           'WATCH TRAILER',
-          style: TextStyle(),
         ),
         shape: RoundedRectangleBorder(
             borderRadius: const BorderRadius.all(Radius.circular(20.0))),
       );
     }
-    return Center(
-      child: Text(
-        'NO TRAILER AVAILABLE YET...',
-        style: TextStyle(
-          color: Colors.red,
-          fontWeight: FontWeight.bold,
-          fontSize: 20.0,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Text(
+          'NO TRAILER AVAILABLE YET...',
+          style: TextStyle(
+            color: Theme.of(context).errorColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+          ),
         ),
       ),
     );
