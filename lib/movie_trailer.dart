@@ -19,7 +19,7 @@ class _MovieTrailerState extends State<MovieTrailer> {
 
   void playVideo() {
     FlutterYoutube.playYoutubeVideoByUrl(
-      apiKey: '',
+      apiKey: 'AIzaSyDw8qvZXYe5AGcp78oPkbrPHMnVCd1YYuA',
       videoUrl: 'https://www.youtube.com/watch?v=${widget.trailerId}',
       autoPlay: true,
       fullScreen: true,
