@@ -168,14 +168,14 @@ class _ApiListState extends State<ApiList> {
       */
       body: GridView.count(
         controller: _scrollController,
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         //mainAxisSpacing: 2.0,
         //crossAxisSpacing: 2.0,
         crossAxisCount: 2,
         childAspectRatio: 4.0 / 6.0,
         children: films
             .map(
-              (film) => InkWell(
+              (Movie film) => InkWell(
                 onTap: () => Navigator.pushNamed(
                     context, AppRoutes.movieDetailRoute,
                     arguments: film),
@@ -200,7 +200,7 @@ class _ApiListState extends State<ApiList> {
                           ),
                           Wrap(
                             children: film.genres
-                                .map((genre) => Text('$genre, '))
+                                .map((String genre) => Text('$genre, '))
                                 .toList(),
                           ),
                         ],
@@ -208,7 +208,7 @@ class _ApiListState extends State<ApiList> {
                     ],
                   ),
                   elevation: 2.0,
-                  margin: EdgeInsets.all(5.0),
+                  margin: const EdgeInsets.all(5.0),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                 ),

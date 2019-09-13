@@ -30,7 +30,7 @@ class MovieDetail extends StatelessWidget {
                     ),
                     Wrap(
                       children: movie.genres
-                          .map((genre) => Chip(
+                          .map((String genre) => Chip(
                                 backgroundColor: Colors.amber,
                                 label: Text(genre),
                               ))
@@ -88,7 +88,7 @@ class MovieDetail extends StatelessWidget {
           style: TextStyle(),
         ),
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0))),
       );
     }
     return Center(

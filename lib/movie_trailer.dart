@@ -17,17 +17,14 @@ class _MovieTrailerState extends State<MovieTrailer> {
     playVideo();
   }
 
-  @override
-  void reassemble() {}
-
   void playVideo() {
     FlutterYoutube.playYoutubeVideoByUrl(
-      apiKey: 'AIzaSyDw8qvZXYe5AGcp78oPkbrPHMnVCd1YYuA',
+      apiKey: '',
       videoUrl: 'https://www.youtube.com/watch?v=${widget.trailerId}',
       autoPlay: true,
       fullScreen: true,
     );
-    FlutterYoutube().onVideoEnded.listen((onData) {
+    FlutterYoutube().onVideoEnded.listen((dynamic onData) {
       Navigator.pop(context);
     });
   }
@@ -36,7 +33,7 @@ class _MovieTrailerState extends State<MovieTrailer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trailer'),
+        title: const Text('Trailer'),
       ),
       body: Center(
         child: Text('TRAILER for ${widget.trailerId}'),
