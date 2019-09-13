@@ -44,6 +44,10 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       serializers.serialize(object.genres,
           specifiedType:
               const FullType(BuiltList, const [const FullType(String)])),
+      'torrents',
+      serializers.serialize(object.torrents,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Torrent)])),
     ];
 
     return result;
@@ -98,6 +102,12 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
                       const FullType(BuiltList, const [const FullType(String)]))
               as BuiltList<dynamic>);
           break;
+        case 'torrents':
+          result.torrents.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(Torrent)]))
+              as BuiltList<dynamic>);
+          break;
       }
     }
 
@@ -124,6 +134,8 @@ class _$Movie extends Movie {
   final String trailerId;
   @override
   final BuiltList<String> genres;
+  @override
+  final BuiltList<Torrent> torrents;
   Map<String, dynamic> __json;
 
   factory _$Movie([void Function(MovieBuilder) updates]) =>
@@ -138,7 +150,8 @@ class _$Movie extends Movie {
       this.rating,
       this.language,
       this.trailerId,
-      this.genres})
+      this.genres,
+      this.torrents})
       : super._() {
     if (title == null) {
       throw new BuiltValueNullFieldError('Movie', 'title');
@@ -167,6 +180,9 @@ class _$Movie extends Movie {
     if (genres == null) {
       throw new BuiltValueNullFieldError('Movie', 'genres');
     }
+    if (torrents == null) {
+      throw new BuiltValueNullFieldError('Movie', 'torrents');
+    }
   }
 
   @override
@@ -191,7 +207,8 @@ class _$Movie extends Movie {
         rating == other.rating &&
         language == other.language &&
         trailerId == other.trailerId &&
-        genres == other.genres;
+        genres == other.genres &&
+        torrents == other.torrents;
   }
 
   @override
@@ -202,14 +219,16 @@ class _$Movie extends Movie {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc($jc(0, title.hashCode), image.hashCode),
-                                summary.hashCode),
-                            year.hashCode),
-                        runtime.hashCode),
-                    rating.hashCode),
-                language.hashCode),
-            trailerId.hashCode),
-        genres.hashCode));
+                            $jc(
+                                $jc($jc($jc(0, title.hashCode), image.hashCode),
+                                    summary.hashCode),
+                                year.hashCode),
+                            runtime.hashCode),
+                        rating.hashCode),
+                    language.hashCode),
+                trailerId.hashCode),
+            genres.hashCode),
+        torrents.hashCode));
   }
 
   @override
@@ -223,7 +242,8 @@ class _$Movie extends Movie {
           ..add('rating', rating)
           ..add('language', language)
           ..add('trailerId', trailerId)
-          ..add('genres', genres))
+          ..add('genres', genres)
+          ..add('torrents', torrents))
         .toString();
   }
 }
@@ -268,6 +288,11 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
       _$this._genres ??= new ListBuilder<String>();
   set genres(ListBuilder<String> genres) => _$this._genres = genres;
 
+  ListBuilder<Torrent> _torrents;
+  ListBuilder<Torrent> get torrents =>
+      _$this._torrents ??= new ListBuilder<Torrent>();
+  set torrents(ListBuilder<Torrent> torrents) => _$this._torrents = torrents;
+
   MovieBuilder();
 
   MovieBuilder get _$this {
@@ -281,6 +306,7 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
       _language = _$v.language;
       _trailerId = _$v.trailerId;
       _genres = _$v.genres?.toBuilder();
+      _torrents = _$v.torrents?.toBuilder();
       _$v = null;
     }
     return this;
@@ -313,12 +339,15 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
               rating: rating,
               language: language,
               trailerId: trailerId,
-              genres: genres.build());
+              genres: genres.build(),
+              torrents: torrents.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'genres';
         genres.build();
+        _$failedField = 'torrents';
+        torrents.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Movie', _$failedField, e.toString());

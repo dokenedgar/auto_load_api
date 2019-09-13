@@ -4,6 +4,7 @@
 
 library movie;
 
+import 'package:auto_load_api/torrents.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
@@ -16,11 +17,6 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
   factory Movie([void updates(MovieBuilder b)]) = _$Movie;
 
   factory Movie.fromJson(Map<dynamic, dynamic> json) {
-    print(json['torrents'].map((dynamic torrent) {
-      print(torrent);
-    }));
-
-    //[0]['seeds'].runtimeType);
     return serializers.deserializeWith(serializer, json);
   }
 
@@ -46,7 +42,7 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   BuiltList<String> get genres;
 
-  //BuiltList<Map<dynamic, dynamic>> get torrents;
+  BuiltList<Torrent> get torrents;
 
   @memoized
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this);

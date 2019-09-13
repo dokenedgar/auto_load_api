@@ -183,12 +183,19 @@ class _ApiListState extends State<ApiList> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      Image.network(
-                        film.image,
-                        height: 200.0,
-                        fit: BoxFit.fitWidth,
-                        //scale: 0.5,
-                      ),
+                      film.image.isEmpty
+                          ? Image.network(
+                              'http://via.placeholder.com/300',
+                              height: 200.0,
+                              fit: BoxFit.fitWidth,
+                              //scale: 0.5,
+                            )
+                          : Image.network(
+                              film.image,
+                              height: 200.0,
+                              fit: BoxFit.fitWidth,
+                              //scale: 0.5,
+                            ),
                       Column(
                         children: <Widget>[
                           Text(

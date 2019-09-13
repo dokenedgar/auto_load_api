@@ -1,5 +1,7 @@
+import 'package:auto_load_api/hyper_link.dart';
 import 'package:auto_load_api/movie.dart';
 import 'package:auto_load_api/route_constants.dart';
+import 'package:auto_load_api/torrents.dart';
 import 'package:flutter/material.dart';
 
 class MovieDetail extends StatelessWidget {
@@ -67,6 +69,18 @@ class MovieDetail extends StatelessWidget {
                     (movie.trailerId.length > 3)
                         ? showTrailer(context, true)
                         : showTrailer(context, false),
+                    Column(
+                      children: movie.torrents
+                          .map((Torrent torrent) => ListTile(
+                                title: HyperLink(
+                                  torrent.url,
+                                  'Download Torrent for ${movie.title}',
+                                ),
+                                subtitle: Text(torrent.quality),
+                                trailing: Text(torrent.size),
+                              ))
+                          .toList(),
+                    ),
                   ],
                 ),
               ),
