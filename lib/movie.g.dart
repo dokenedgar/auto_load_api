@@ -21,7 +21,7 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       'title',
       serializers.serialize(object.title,
           specifiedType: const FullType(String)),
-      'medium_cover_image',
+      'large_cover_image',
       serializers.serialize(object.image,
           specifiedType: const FullType(String)),
       'summary',
@@ -68,7 +68,7 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           result.title = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'medium_cover_image':
+        case 'large_cover_image':
           result.image = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;

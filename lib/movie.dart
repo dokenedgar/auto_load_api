@@ -24,7 +24,7 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   String get title;
 
-  @BuiltValueField(wireName: 'medium_cover_image')
+  @BuiltValueField(wireName: 'large_cover_image')
   String get image;
 
   String get summary;

@@ -101,6 +101,11 @@ class _ApiListState extends State<ApiList> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    const int itemHeight = 420;
+    final double itemWidth = screenSize.width / 2;
+    final double itemAspectRatio = itemWidth / itemHeight;
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -122,108 +127,84 @@ class _ApiListState extends State<ApiList> {
             ),
         ],
       ),
-      /*
-      body: ListView.separated(
-        controller: _scrollController,
-        itemCount: films.length,
-        padding: const EdgeInsetsDirectional.only(bottom: 24.0),
-        itemBuilder: (BuildContext context, int index) {
-          final Movie movie = films[index];
-
-          return Column(
-            children: <Widget>[
-              ListTile(
-                  leading: Image.network(
-                    movie.image,
-                    filterQuality: FilterQuality.medium,
-                  ),
-                  title: films.isEmpty
-                      ? const Text('Loading')
-                      : Text(
-                          movie.title,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                  subtitle: Text(
-                    movie.summary,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 15.0),
-                  ),
-                  trailing: Text(
-                    'Rating\n${movie.rating.toString()}',
-                    textAlign: TextAlign.center,
-                  ),
-                  onTap: () => Navigator.pushNamed(
-                      context, AppRoutes.movieDetailRoute,
-                      arguments: movie)),
-              if (isLoading && index == films.length - 1)
-                const CircularProgressIndicator()
-            ],
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => Divider(
-          color: Colors.black,
-        ),
-      ),
-      */
-      body: GridView.count(
+      body: GridView.builder(
         controller: _scrollController,
         padding: const EdgeInsets.all(4.0),
-        //mainAxisSpacing: 2.0,
-        //crossAxisSpacing: 2.0,
-        crossAxisCount: 2,
-        childAspectRatio: 4.0 / 6.0,
-        children: films
-            .map(
-              (Movie film) => InkWell(
-                onTap: () => Navigator.pushNamed(
-                    context, AppRoutes.movieDetailRoute,
-                    arguments: film),
-                child: Card(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      film.image.isEmpty
-                          ? Image.network(
-                              'http://via.placeholder.com/300',
-                              height: 200.0,
-                              fit: BoxFit.fitWidth,
-                              //scale: 0.5,
-                            )
-                          : Image.network(
-                              film.image,
-                              height: 200.0,
-                              fit: BoxFit.fitWidth,
-                              //scale: 0.5,
-                            ),
-                      Column(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: itemAspectRatio,
+        ),
+        itemCount: films.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Movie film = films[index];
+
+          print(film.image);
+          return InkWell(
+            onTap: () => Navigator.pushNamed(
+              context,
+              AppRoutes.movieDetailRoute,
+              arguments: film,
+            ),
+            child: Card(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    height: itemWidth * (3 / 2),
+                    alignment: AlignmentDirectional.topCenter,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadiusDirectional.only(
+                        topStart: Radius.circular(4.0),
+                        topEnd: Radius.circular(4.0),
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.fitHeight,
+                        image: NetworkImage(
+                          film.image.isEmpty
+                              ? 'http://via.placeholder.com/300'
+                              : film.image,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Container(
+                      margin: const EdgeInsetsDirectional.only(top: 16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             film.title,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Wrap(
-                            children: film.genres
-                                .map((String genre) => Text('$genre, '))
-                                .toList(),
+                            alignment: WrapAlignment.center,
+                            children: List<Widget>.generate(
+                              film.genres.length,
+                              (int i) {
+                                return Text(
+                                    '${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
+                              },
+                            ),
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                  elevation: 2.0,
-                  margin: const EdgeInsets.all(5.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                ),
+                ],
               ),
-
-              //child: Text(quote.value),
-            )
-            .toList(),
+              elevation: 2.0,
+              margin: const EdgeInsets.all(5.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
