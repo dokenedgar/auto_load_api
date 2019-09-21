@@ -8,6 +8,7 @@ class MovieDetail extends StatelessWidget {
   const MovieDetail({Key key, @required this.movie}) : super(key: key);
 
   final Movie movie;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,6 +24,8 @@ class MovieDetail extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Image(
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
                       image: NetworkImage(movie.image),
                     ),
                     Text(
@@ -103,7 +106,8 @@ class MovieDetail extends StatelessWidget {
           context,
           AppRoutes.movieTrailer,
           arguments: movie.trailerId,
-        ), //print(movie.yt_trailer_code),
+        ),
+        //print(movie.yt_trailer_code),
         child: Text(
           'WATCH TRAILER',
         ),
