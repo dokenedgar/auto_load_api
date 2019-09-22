@@ -138,7 +138,7 @@ class _ApiListState extends State<ApiList> {
         itemBuilder: (BuildContext context, int index) {
           final Movie film = films[index];
 
-          print(film.image);
+          //print(film.image);
           return InkWell(
             onTap: () => Navigator.pushNamed(
               context,

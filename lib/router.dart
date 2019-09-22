@@ -15,16 +15,18 @@ Route<void> generateRoute(RouteSettings settings) {
     case AppRoutes.movieDetailRoute:
       final Movie movie = settings.arguments;
       return MaterialPageRoute<void>(
-          builder: (BuildContext context) => MovieDetail(
-                movie: movie,
-              ));
+        builder: (BuildContext context) => MovieDetail(
+          movie: movie,
+        ),
+      );
 
     case AppRoutes.movieTrailer:
       final String trailerID = settings.arguments;
       return MaterialPageRoute<void>(
-          builder: (BuildContext context) => MovieTrailer(
-                trailerId: trailerID,
-              ));
+        builder: (BuildContext context) => MovieTrailer(
+          trailerId: trailerID,
+        ),
+      );
     default:
       return MaterialPageRoute<void>(
           builder: (BuildContext context) => ApiList());
