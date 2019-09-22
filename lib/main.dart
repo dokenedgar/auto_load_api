@@ -1,24 +1,39 @@
 import 'dart:convert';
 
+import 'package:auto_load_api/actions/page_load_action.dart';
+import 'package:auto_load_api/models/app_state.dart';
+import 'package:auto_load_api/reducers/page_load_reducer.dart';
 import 'package:auto_load_api/route_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
+import 'package:redux/redux.dart';
 
 import 'movie.dart';
 import 'router.dart' as router;
 
 // todo dive deep into async/await
 
-void main() => runApp(BaseWidget());
+void main() {
+  final Store<AppState> store =
+      Store<AppState>(reducer, initialState: const AppState(1, true, false));
+  runApp(BaseWidget(store: store));
+}
 
 class BaseWidget extends StatelessWidget {
+  const BaseWidget({Key key, this.store}) : super(key: key);
+  final Store<AppState> store;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      //home: ApiList(),
-      onGenerateRoute: router.generateRoute,
-      initialRoute: AppRoutes.homeRoute,
+    return StoreProvider<AppState>(
+      store: store,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        //home: ApiList(),
+        onGenerateRoute: router.generateRoute,
+        initialRoute: AppRoutes.homeRoute,
+      ),
     );
   }
 }
@@ -33,26 +48,46 @@ class _ApiListState extends State<ApiList> {
 
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int pageNumber = 1;
-  bool isLoading = true;
-  bool error = false;
 
+  //int pageNumber = 1;
+  //bool isLoading = true;
+  //bool error = false;
+  Store<AppState> store;
+
+  //Using Redux
   @override
   void initState() {
     super.initState();
-
-    fetch();
+    //final Store<AppState> store = StoreProvider.of<AppState>(context);
+    //print('FROM REDUX: ${store.state.pageNumber}');
+    //fetch();
     _scrollController.addListener(_onScrollChanged);
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    store = StoreProvider.of<AppState>(context);
+    // print('FROM REDUX: ${store.state.pageNumber}');
+    fetch();
+    //_scrollController.addListener(_onScrollChanged);
+  }
+
   void _onScrollChanged() {
+    //final Store<AppState> store = StoreProvider.of<AppState>(context);
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      setState(() {
-        pageNumber++;
-        isLoading = true;
-      });
-      print('get page $pageNumber');
+      ///  setState(() {
+      //pageNumber++;
+      int pageNum = store.state.pageNumber + 1;
+      store.dispatch(ChangePageNumber(pageNum));
+      //isLoading = true;
+      print('${store.state.pageNumber}');
+      //store.dispatch(ChangeIsLoading(!store.state.isLoading));
+      store.dispatch(ChangeIsLoading(true));
+
+      ///   });
+      print('get page ${store.state.pageNumber}');
 
       WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController
           .animateTo(_scrollController.position.maxScrollExtent,
@@ -64,10 +99,13 @@ class _ApiListState extends State<ApiList> {
   }
 
   Future<void> fetch() async {
-    final Response response = await get(
-        'https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=50');
+    //final Store<AppState> store = StoreProvider.of<AppState>(context);
+    print('FROM FETCH REDUX: ${store.state.pageNumber}');
 
     try {
+      final Response response = await get(
+          'https://yts.lt/api/v2/list_movies.json?page=${store.state.pageNumber}&limit=4');
+
       if (response.statusCode == 200) {
         print('OK');
         final Map<String, dynamic> decodedData = json.decode(response.body);
@@ -82,14 +120,19 @@ class _ApiListState extends State<ApiList> {
           }
         });
       } else {
-        setState(() => error = true);
+        print('if/else Error');
+        //setState(() => error = true);
+        store.dispatch(ChangeErrorState(true));
       }
     } catch (e) {
-      setState(() => error = true);
+      print('Catch Error');
+      //setState(() => error = true);
+      store.dispatch(ChangeErrorState(true));
     }
 
     if (mounted) {
-      setState(() => isLoading = false);
+      //setState(() => isLoading = false);
+      store.dispatch(ChangeIsLoading(false));
     }
   }
 
@@ -111,17 +154,19 @@ class _ApiListState extends State<ApiList> {
       appBar: AppBar(
         title: const Text('Get Data From An API'),
         actions: <Widget>[
-          if (error)
+          if (store.state.error)
             IconButton(
               icon: Icon(
                 Icons.error_outline,
                 color: Colors.red,
               ),
               onPressed: () {
-                setState(() {
-                  error = false;
-                  isLoading = true;
-                });
+                //setState(() {
+                //error = false;
+                store.dispatch(ChangeErrorState(true));
+                //isLoading = true;
+                store.dispatch(ChangeIsLoading(true));
+                // });
                 fetch();
               },
             ),
