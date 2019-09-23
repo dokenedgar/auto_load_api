@@ -8,11 +8,8 @@ import 'package:flutter/material.dart';
 class MovieDetail extends StatelessWidget {
   const MovieDetail({Key key}) : super(key: key);
 
-  //final Movie movie;
-
   @override
   Widget build(BuildContext context) {
-    //final Movie movie = StoreProvider.of<AppState>(context).state.selectedMovie;
     return MovieContainer(
       builder: (BuildContext context, Movie movie) {
         return Scaffold(
@@ -113,7 +110,6 @@ class MovieDetail extends StatelessWidget {
           context,
           AppRoutes.movieTrailer,
         ),
-        //print(movie.yt_trailer_code),
         child: const Text(
           'WATCH TRAILER',
         ),

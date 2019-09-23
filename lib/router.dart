@@ -11,22 +11,15 @@ Route<void> generateRoute(RouteSettings settings) {
           builder: (BuildContext context) => ApiList());
 
     case AppRoutes.movieDetailRoute:
-
-      /// final Movie movie = settings.arguments;
       return MaterialPageRoute<void>(
-        builder: (BuildContext context) => const MovieDetail(
-
-            /// movie: movie,
-            ),
+        builder: (BuildContext context) => const MovieDetail(),
       );
 
     case AppRoutes.movieTrailer:
       return MaterialPageRoute<void>(
-        builder: (BuildContext context) => const MovieTrailer(
-
-            /// trailerId: trailerID,
-            ),
+        builder: (BuildContext context) => const MovieTrailer(),
       );
+
     default:
       return MaterialPageRoute<void>(
           builder: (BuildContext context) => ApiList());

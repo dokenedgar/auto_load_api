@@ -28,7 +28,6 @@ class BaseWidget extends StatelessWidget {
       store: store,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        //home: ApiList(),
         onGenerateRoute: router.generateRoute,
         initialRoute: AppRoutes.homeRoute,
       ),
@@ -76,7 +75,7 @@ class _ApiListState extends State<ApiList> {
 
   Future<void> fetch() async {
     final Response response = await get(
-        'https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=10');
+        'https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=20');
 
     try {
       if (response.statusCode == 200) {
@@ -86,10 +85,6 @@ class _ApiListState extends State<ApiList> {
             List<Map<String, dynamic>>.from(decodedData['data']['movies']);
         final List<Movie> filmsToRedux =
             StoreProvider.of<AppState>(context).state.films;
-        //  if (StoreProvider.of<AppState>(context).state.films != null) {
-
-        //  }
-
         for (Map<String, dynamic> film in movies) {
           final Movie movie = Movie.fromJson(film);
           filmsToRedux.add(movie);
@@ -156,8 +151,6 @@ class _ApiListState extends State<ApiList> {
                 itemCount: films.length,
                 itemBuilder: (BuildContext context, int index) {
                   final Movie film = films[index];
-
-                  //print(film.image);
                   return InkWell(
                     onTap: () {
                       StoreProvider.of<AppState>(context)
