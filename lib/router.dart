@@ -4,8 +4,6 @@ import 'package:auto_load_api/movie_trailer.dart';
 import 'package:auto_load_api/route_constants.dart';
 import 'package:flutter/material.dart';
 
-import 'movie.dart';
-
 Route<void> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case AppRoutes.homeRoute:
@@ -13,19 +11,21 @@ Route<void> generateRoute(RouteSettings settings) {
           builder: (BuildContext context) => ApiList());
 
     case AppRoutes.movieDetailRoute:
-      final Movie movie = settings.arguments;
+
+      /// final Movie movie = settings.arguments;
       return MaterialPageRoute<void>(
-        builder: (BuildContext context) => MovieDetail(
-          movie: movie,
-        ),
+        builder: (BuildContext context) => const MovieDetail(
+
+            /// movie: movie,
+            ),
       );
 
     case AppRoutes.movieTrailer:
-      final String trailerID = settings.arguments;
       return MaterialPageRoute<void>(
-        builder: (BuildContext context) => MovieTrailer(
-          trailerId: trailerID,
-        ),
+        builder: (BuildContext context) => const MovieTrailer(
+
+            /// trailerId: trailerID,
+            ),
       );
     default:
       return MaterialPageRoute<void>(
