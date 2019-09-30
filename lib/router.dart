@@ -1,6 +1,6 @@
 import 'package:auto_load_api/main.dart';
-import 'package:auto_load_api/movie_detail.dart';
-import 'package:auto_load_api/movie_trailer.dart';
+import 'package:auto_load_api/presentation/movie_detail.dart';
+import 'package:auto_load_api/presentation/movie_trailer.dart';
 import 'package:auto_load_api/route_constants.dart';
 import 'package:flutter/material.dart';
 

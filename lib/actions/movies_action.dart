@@ -13,3 +13,10 @@ class SelectedMovie {
   const SelectedMovie(this.movie);
   final Movie movie;
 }
+
+class ChangePageNumber {
+  const ChangePageNumber(this.pageNumber);
+  final int pageNumber;
+}
+
+class LoadMovies {}

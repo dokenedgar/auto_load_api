@@ -15,7 +15,7 @@ class MoviesContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, List<Movie>>(
-      converter: (Store<AppState> store) => store.state.films,
+      converter: (Store<AppState> store) => store.state.films.toList(),
       builder: builder,
     );
   }

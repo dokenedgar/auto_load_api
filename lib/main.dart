@@ -1,21 +1,27 @@
-import 'dart:convert';
-
 import 'package:auto_load_api/actions/movies_action.dart';
 import 'package:auto_load_api/containers/movies_container.dart';
+import 'package:auto_load_api/data/yts_api.dart';
+import 'package:auto_load_api/middleware/app_middleware.dart';
 import 'package:auto_load_api/models/app_state.dart';
 import 'package:auto_load_api/reducers/movie_reducer.dart';
 import 'package:auto_load_api/route_constants.dart';
+import 'package:auto_load_api/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 
 import 'movie.dart';
 import 'router.dart' as router;
 
 void main() {
-  final Store<AppState> store =
-      Store<AppState>(reducer, initialState: AppState(<Movie>[], null));
+  final HttpService ytsHttpService = HttpService('https://yts.lt/api/v2');
+  final YtsMovieApi ytsMovieApi = YtsMovieApi(ytsHttpService);
+  final AppMiddleware middleware = AppMiddleware(ytsMovieApi);
+  final Store<AppState> store = Store<AppState>(
+    reducer,
+    initialState: AppState.initialState(),
+    middleware: middleware.items,
+  );
   runApp(BaseWidget(store: store));
 }
 
@@ -43,62 +49,36 @@ class ApiList extends StatefulWidget {
 class _ApiListState extends State<ApiList> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int pageNumber = 1;
   bool isLoading = true;
   bool error = false;
 
   @override
   void initState() {
     super.initState();
-
-    fetch();
+    //fetch();
     _scrollController.addListener(_onScrollChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    StoreProvider.of<AppState>(context).dispatch(LoadMovies());
   }
 
   void _onScrollChanged() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       setState(() {
-        pageNumber++;
         isLoading = true;
       });
-      print('get page $pageNumber');
 
       WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController
           .animateTo(_scrollController.position.maxScrollExtent,
               duration: const Duration(milliseconds: 300),
               curve: Curves.bounceInOut));
-
-      fetch();
-    }
-  }
-
-  Future<void> fetch() async {
-    final Response response = await get(
-        'https://yts.lt/api/v2/list_movies.json?page=$pageNumber&limit=20');
-
-    try {
-      if (response.statusCode == 200) {
-        print('OK');
-        final Map<String, dynamic> decodedData = json.decode(response.body);
-        final List<Map<String, dynamic>> movies =
-            List<Map<String, dynamic>>.from(decodedData['data']['movies']);
-        final List<Movie> filmsToRedux =
-            StoreProvider.of<AppState>(context).state.films;
-        for (Map<String, dynamic> film in movies) {
-          final Movie movie = Movie.fromJson(film);
-          filmsToRedux.add(movie);
-        }
-        StoreProvider.of<AppState>(context).dispatch(SetMovies(filmsToRedux));
-      } else {
-        setState(() => error = true);
-      }
-    } catch (e) {
-      setState(() => error = true);
-    }
-
-    if (mounted) {
-      setState(() => isLoading = false);
+      print(
+          'Loading Page => ${StoreProvider.of<AppState>(context).state.pageNumber}');
+      StoreProvider.of<AppState>(context).dispatch(LoadMovies());
     }
   }
 
@@ -132,7 +112,7 @@ class _ApiListState extends State<ApiList> {
                     error = false;
                     isLoading = true;
                   });
-                  fetch();
+                  //fetch();
                 },
               ),
           ],
