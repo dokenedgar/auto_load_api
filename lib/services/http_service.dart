@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 class HttpService {
-  HttpService(this.baseUrl) : client = Client();
+  HttpService(this.baseUrl, [Client client]) : client = client ?? Client();
   final String baseUrl;
   final Client client;
 

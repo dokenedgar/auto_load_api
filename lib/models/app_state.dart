@@ -4,7 +4,7 @@
 
 library app_state;
 
-import 'package:auto_load_api/movie.dart';
+import 'package:auto_load_api/models/movie.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 

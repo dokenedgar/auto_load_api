@@ -4,14 +4,13 @@ import 'package:auto_load_api/data/yts_api.dart';
 import 'package:auto_load_api/middleware/app_middleware.dart';
 import 'package:auto_load_api/models/app_state.dart';
 import 'package:auto_load_api/reducers/movie_reducer.dart';
-import 'package:auto_load_api/route_constants.dart';
 import 'package:auto_load_api/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import 'movie.dart';
-import 'router.dart' as router;
+import 'models/movie.dart';
+import 'route_constants.dart' as router;
 
 void main() {
   final HttpService ytsHttpService = HttpService('https://yts.lt/api/v2');
@@ -35,7 +34,7 @@ class BaseWidget extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: router.generateRoute,
-        initialRoute: AppRoutes.homeRoute,
+        initialRoute: router.AppRoutes.homeRoute,
       ),
     );
   }
@@ -137,7 +136,7 @@ class _ApiListState extends State<ApiList> {
                           .dispatch(SelectedMovie(film));
                       return Navigator.pushNamed(
                         context,
-                        AppRoutes.movieDetailRoute,
+                        router.AppRoutes.movieDetailRoute,
                       );
                     },
                     child: Card(

@@ -1,6 +1,6 @@
 library torrents;
 
-import 'package:auto_load_api/serializers.dart';
+import 'package:auto_load_api/models/serializers.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 

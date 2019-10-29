@@ -1,8 +1,8 @@
 import 'package:auto_load_api/containers/movie_container.dart';
-import 'package:auto_load_api/hyper_link.dart';
-import 'package:auto_load_api/movie.dart';
+import 'package:auto_load_api/models/movie.dart';
+import 'package:auto_load_api/models/torrents.dart';
+import 'package:auto_load_api/presentation/widgets/hyper_link.dart';
 import 'package:auto_load_api/route_constants.dart';
-import 'package:auto_load_api/torrents.dart';
 import 'package:flutter/material.dart';
 
 class MovieDetail extends StatelessWidget {
