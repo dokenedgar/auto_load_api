@@ -3,7 +3,7 @@
 //on 23/Sep/2019
 
 import 'package:auto_load_api/models/app_state.dart';
-import 'package:auto_load_api/movie.dart';
+import 'package:auto_load_api/models/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -15,7 +15,7 @@ class MoviesContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, List<Movie>>(
-      converter: (Store<AppState> store) => store.state.films,
+      converter: (Store<AppState> store) => store.state.films.toList(),
       builder: builder,
     );
   }

@@ -3,8 +3,8 @@
 // on 31/08/2019
 library serializers;
 
-import 'package:auto_load_api/movie.dart';
-import 'package:auto_load_api/torrents.dart';
+import 'package:auto_load_api/models/movie.dart';
+import 'package:auto_load_api/models/torrents.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
