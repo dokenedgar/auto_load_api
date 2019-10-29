@@ -18,7 +18,7 @@ import '../res/res.dart';
 void main() {
   tearDown(resetMockitoState);
   test('loadMovies', () async {
-    int pageNumber = 1;
+    const int pageNumber = 1;
     final MockYtsApi api = MockYtsApi();
     final MockStore store = MockStore(MockAppState());
 

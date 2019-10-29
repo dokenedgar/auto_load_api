@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('mockito', () {
-    MockCat myCat = MockCat();
+    final MockCat myCat = MockCat();
 
     when(myCat.sound()).thenReturn('something');
     //String sound = myCat.sound();
