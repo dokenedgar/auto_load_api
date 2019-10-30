@@ -87,10 +87,12 @@ class _ApiListState extends State<ApiList> {
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () async {
-                await showSearch<String>(
+                final String result = await showSearch<String>(
                   context: context,
-                  delegate: null,
+                  delegate: QuerySearchDelegate(),
                 );
+
+                print('result received');
               },
             )
           ],
@@ -188,25 +190,30 @@ class _ApiListState extends State<ApiList> {
 class QuerySearchDelegate extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
-    // TODO: implement buildActions
-    return null;
+    return const <Widget>[
+      CloseButton(),
+    ];
   }
 
   @override
   Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
     return null;
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    return null;
+    //print('buildResults');
+    return InkWell(
+      child: const Text('Result'),
+      onTap: () {
+        close(context, 'results');
+      },
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    return null;
+    //print('buildSuggestions');
+    return const Text('Suggestions');
   }
 }

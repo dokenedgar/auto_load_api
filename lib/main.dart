@@ -31,6 +31,9 @@ class BaseWidget extends StatelessWidget {
       store: store,
       child: MaterialApp(
         //theme: ThemeData.dark(),
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+        ),
         debugShowCheckedModeBanner: false,
         onGenerateRoute: router.generateRoute,
         initialRoute: router.AppRoutes.homeRoute,
