@@ -100,84 +100,110 @@ class _ApiListState extends State<ApiList> {
             ? Center(
                 child: const CircularProgressIndicator(),
               )
-            : GridView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(4.0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: itemAspectRatio,
-                ),
-                itemCount: films.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Movie film = films[index];
-                  return InkWell(
-                    onTap: () {
-                      StoreProvider.of<AppState>(context).dispatch(SelectedMovie(film));
-                      return Navigator.pushNamed(
-                        context,
-                        router.AppRoutes.movieDetailRoute,
-                      );
-                    },
-                    child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                            height: itemWidth * (3 / 2),
-                            alignment: AlignmentDirectional.topCenter,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadiusDirectional.only(
-                                topStart: Radius.circular(4.0),
-                                topEnd: Radius.circular(4.0),
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.fitHeight,
-                                image: NetworkImage(
-                                  film.image.isEmpty ? 'http://via.placeholder.com/300' : film.image,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: Container(
-                              margin: const EdgeInsetsDirectional.only(top: 16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    film.title,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Wrap(
-                                    alignment: WrapAlignment.center,
-                                    children: List<Widget>.generate(
-                                      film.genres.length,
-                                      (int i) {
-                                        return Text('${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      elevation: 2.0,
-                      margin: const EdgeInsets.all(5.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  );
-                },
+            : GridviewBuilder(
+                scrollController: _scrollController,
+                itemAspectRatio: itemAspectRatio,
+                itemWidth: itemWidth,
+                films: films,
               ),
       );
     });
+  }
+}
+
+class GridviewBuilder extends StatelessWidget {
+  const GridviewBuilder({
+    Key key,
+    @required ScrollController scrollController,
+    @required this.itemAspectRatio,
+    @required this.itemWidth,
+    this.films,
+  })  : _scrollController = scrollController,
+        super(key: key);
+
+  final ScrollController _scrollController;
+  final double itemAspectRatio;
+  final double itemWidth;
+  final List<Movie> films;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      controller: _scrollController,
+      padding: const EdgeInsets.all(4.0),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: itemAspectRatio,
+      ),
+      itemCount: films.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Movie film = films[index];
+        return InkWell(
+          onTap: () {
+            StoreProvider.of<AppState>(context).dispatch(SelectedMovie(film));
+            return Navigator.pushNamed(
+              context,
+              router.AppRoutes.movieDetailRoute,
+            );
+          },
+          child: Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Container(
+                  height: itemWidth * (3 / 2),
+                  alignment: AlignmentDirectional.topCenter,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadiusDirectional.only(
+                      topStart: Radius.circular(4.0),
+                      topEnd: Radius.circular(4.0),
+                    ),
+                    image: DecorationImage(
+                      fit: BoxFit.fitHeight,
+                      image: NetworkImage(
+                        film.image.isEmpty ? 'http://via.placeholder.com/300' : film.image,
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsetsDirectional.only(top: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          film.title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          children: List<Widget>.generate(
+                            film.genres.length,
+                            (int i) {
+                              return Text('${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            elevation: 2.0,
+            margin: const EdgeInsets.all(5.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
