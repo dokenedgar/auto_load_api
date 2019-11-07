@@ -9,6 +9,7 @@ import 'package:auto_load_api/models/movie.dart';
 import 'package:auto_load_api/route_constants.dart' as router;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 class ApiList extends StatefulWidget {
   @override
@@ -35,18 +36,16 @@ class _ApiListState extends State<ApiList> {
   }
 
   void _onScrollChanged() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       setState(() {
         isLoading = true;
       });
 
-      WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController
-          .animateTo(_scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.bounceInOut));
-      print(
-          'Loading Page => ${StoreProvider.of<AppState>(context).state.pageNumber}');
+      WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.bounceInOut));
+      print('Loading Page => ${StoreProvider.of<AppState>(context).state.pageNumber}');
       StoreProvider.of<AppState>(context).dispatch(LoadMovies());
     }
   }
@@ -89,10 +88,10 @@ class _ApiListState extends State<ApiList> {
               onPressed: () async {
                 final String result = await showSearch<String>(
                   context: context,
-                  delegate: QuerySearchDelegate(),
+                  delegate: QuerySearchDelegate(StoreProvider.of<AppState>(context)),
                 );
 
-                print('result received');
+                print('result received:  $result');
               },
             )
           ],
@@ -113,8 +112,7 @@ class _ApiListState extends State<ApiList> {
                   final Movie film = films[index];
                   return InkWell(
                     onTap: () {
-                      StoreProvider.of<AppState>(context)
-                          .dispatch(SelectedMovie(film));
+                      StoreProvider.of<AppState>(context).dispatch(SelectedMovie(film));
                       return Navigator.pushNamed(
                         context,
                         router.AppRoutes.movieDetailRoute,
@@ -135,17 +133,14 @@ class _ApiListState extends State<ApiList> {
                               image: DecorationImage(
                                 fit: BoxFit.fitHeight,
                                 image: NetworkImage(
-                                  film.image.isEmpty
-                                      ? 'http://via.placeholder.com/300'
-                                      : film.image,
+                                  film.image.isEmpty ? 'http://via.placeholder.com/300' : film.image,
                                 ),
                               ),
                             ),
                           ),
                           Flexible(
                             child: Container(
-                              margin:
-                                  const EdgeInsetsDirectional.only(top: 16.0),
+                              margin: const EdgeInsetsDirectional.only(top: 16.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
@@ -162,8 +157,7 @@ class _ApiListState extends State<ApiList> {
                                     children: List<Widget>.generate(
                                       film.genres.length,
                                       (int i) {
-                                        return Text(
-                                            '${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
+                                        return Text('${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
                                       },
                                     ),
                                   ),
@@ -188,6 +182,9 @@ class _ApiListState extends State<ApiList> {
 }
 
 class QuerySearchDelegate extends SearchDelegate<String> {
+  QuerySearchDelegate(this.store);
+  final Store<AppState> store;
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return const <Widget>[
@@ -214,6 +211,12 @@ class QuerySearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     //print('buildSuggestions');
-    return const Text('Suggestions');
+    if (query != null) {
+      // do the search
+
+      return const CircularProgressIndicator();
+    } else {
+      return const Text('Suggestions');
+    }
   }
 }

@@ -24,8 +24,9 @@ class AppMiddleware {
     //print(next);
     final List<Movie> movieList =
         await ytsApi.getMovies(store.state.pageNumber);
-    store.dispatch(SetMovies(movieList));
-    store.dispatch(ChangePageNumber(store.state.pageNumber + 1));
+    store
+      ..dispatch(SetMovies(movieList))
+      ..dispatch(ChangePageNumber(store.state.pageNumber + 1));
     //next(action);
   }
 }
