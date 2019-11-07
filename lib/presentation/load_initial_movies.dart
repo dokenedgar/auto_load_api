@@ -9,8 +9,9 @@ import 'package:auto_load_api/containers/movies_container.dart';
 import 'package:auto_load_api/main.dart';
 import 'package:auto_load_api/models/app_state.dart';
 import 'package:auto_load_api/models/movie.dart';
+import 'package:auto_load_api/presentation/movie_search.dart';
 import 'package:auto_load_api/route_constants.dart' as router;
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide showSearch, SearchDelegate;
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:rxdart/rxdart.dart';
@@ -141,6 +142,7 @@ class GridviewBuilder extends StatelessWidget {
   // final double itemWidth;
   final Size screenSize;
   final int itemHeight = 420;
+
   //final double itemWidth = screenSize.width / 2;
 
   final List<Movie> films;
@@ -232,18 +234,29 @@ class QuerySearchDelegate extends SearchDelegate<String> {
   QuerySearchDelegate({this.store, ActionsDispatcher dispatcher, this.movies, this.scrollController})
       : streamController = StreamController<String>() {
     dispatcher.ofType<SetMovies>().listen(_onNewResult);
-    Observable<String>(streamController.stream).debounceTime(const Duration(milliseconds: 500)).listen(_onNewQuery);
+    sub = Observable<String>(streamController.stream)
+        .debounceTime(const Duration(seconds: 5))
+        .distinct()
+        .listen(_onNewQuery);
   }
 
   final StreamController<String> streamController;
   final ScrollController scrollController;
   final Store<AppState> store;
   List<Movie> movies;
+  bool isLoading = false;
+  StreamSubscription<String> sub;
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    return const <Widget>[
-      CloseButton(),
+    return <Widget>[
+      //CloseButton(),
+      if (query.trim().isNotEmpty)
+        IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              query = '';
+            }),
     ];
   }
 
@@ -266,16 +279,23 @@ class QuerySearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     //print('buildSuggestions');
-    if (query.isNotEmpty) {
+    if (query.trim().isNotEmpty) {
       // do the search
-
-      streamController.add(query);
-      return Container(
-        width: double.infinity,
-        child: const CircularProgressIndicator(),
-        alignment: AlignmentDirectional.topCenter,
-        margin: const EdgeInsets.all(16.0),
-      );
+      streamController.add(query.trim());
+      if (isLoading) {
+        return Container(
+          width: double.infinity,
+          child: const CircularProgressIndicator(),
+          alignment: AlignmentDirectional.topCenter,
+          margin: const EdgeInsets.all(16.0),
+        );
+      } else {
+        return GridviewBuilder(
+          scrollController: scrollController,
+          context: context,
+          films: movies,
+        );
+      }
     } else {
       return GridviewBuilder(
         scrollController: scrollController,
@@ -289,10 +309,20 @@ class QuerySearchDelegate extends SearchDelegate<String> {
     // clear the loading
 
     // set the new movies
-    movies = event.films;
+    setState(() {
+      isLoading = false;
+      movies = event.films;
+    });
   }
 
   void _onNewQuery(String query) {
-    //store.dispatch(action)
+    isLoading = true;
+    store.dispatch(SearchMovieGenre(query));
+  }
+
+  @override
+  void close(BuildContext context, String result) {
+    sub.cancel();
+    super.close(context, result);
   }
 }
