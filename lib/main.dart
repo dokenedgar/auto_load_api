@@ -8,6 +8,7 @@ import 'package:auto_load_api/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'route_constants.dart' as router;
 
@@ -74,7 +75,7 @@ class ActionsDispatcher extends InheritedWidget {
 
   final Stream<dynamic> actions;
 
-  Stream<T> ofType<T>() => actions.where((dynamic it) => it.runtimeType == T);
+  Stream<T> ofType<T>() => Observable<dynamic>(actions).whereType<T>();
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {

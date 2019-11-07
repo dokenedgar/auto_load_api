@@ -2,14 +2,18 @@
 //by 12:35 AM
 //on 30/Oct/2019
 
+import 'dart:async';
+
 import 'package:auto_load_api/actions/movies_action.dart';
 import 'package:auto_load_api/containers/movies_container.dart';
+import 'package:auto_load_api/main.dart';
 import 'package:auto_load_api/models/app_state.dart';
 import 'package:auto_load_api/models/movie.dart';
 import 'package:auto_load_api/route_constants.dart' as router;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ApiList extends StatefulWidget {
   @override
@@ -58,11 +62,11 @@ class _ApiListState extends State<ApiList> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
+    /*  final Size screenSize = MediaQuery.of(context).size;
     const int itemHeight = 420;
     final double itemWidth = screenSize.width / 2;
     final double itemAspectRatio = itemWidth / itemHeight;
-
+*/
     return MoviesContainer(builder: (BuildContext context, List<Movie> films) {
       return Scaffold(
         key: _scaffoldKey,
@@ -88,7 +92,12 @@ class _ApiListState extends State<ApiList> {
               onPressed: () async {
                 final String result = await showSearch<String>(
                   context: context,
-                  delegate: QuerySearchDelegate(StoreProvider.of<AppState>(context)),
+                  delegate: QuerySearchDelegate(
+                    store: StoreProvider.of<AppState>(context),
+                    dispatcher: ActionsDispatcher.of(context),
+                    movies: films,
+                    scrollController: _scrollController,
+                  ),
                 );
 
                 print('result received:  $result');
@@ -102,8 +111,9 @@ class _ApiListState extends State<ApiList> {
               )
             : GridviewBuilder(
                 scrollController: _scrollController,
-                itemAspectRatio: itemAspectRatio,
-                itemWidth: itemWidth,
+                // itemAspectRatio: itemAspectRatio,
+                // itemWidth: itemWidth,
+                context: context,
                 films: films,
               ),
       );
@@ -112,22 +122,33 @@ class _ApiListState extends State<ApiList> {
 }
 
 class GridviewBuilder extends StatelessWidget {
-  const GridviewBuilder({
+  GridviewBuilder({
     Key key,
     @required ScrollController scrollController,
-    @required this.itemAspectRatio,
-    @required this.itemWidth,
+    //  @required this.itemAspectRatio,
+    //  @required this.itemWidth,
+    @required this.context,
     this.films,
   })  : _scrollController = scrollController,
+        screenSize = MediaQuery.of(context).size,
+        // itemAspectRatio = itemWidth / itemHeight,
         super(key: key);
 
+  final BuildContext context;
   final ScrollController _scrollController;
-  final double itemAspectRatio;
-  final double itemWidth;
+
+  //final double itemAspectRatio;
+  // final double itemWidth;
+  final Size screenSize;
+  final int itemHeight = 420;
+  //final double itemWidth = screenSize.width / 2;
+
   final List<Movie> films;
 
   @override
   Widget build(BuildContext context) {
+    final double itemWidth = screenSize.width / 2;
+    final double itemAspectRatio = itemWidth / itemHeight;
     return GridView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.all(4.0),
@@ -208,8 +229,16 @@ class GridviewBuilder extends StatelessWidget {
 }
 
 class QuerySearchDelegate extends SearchDelegate<String> {
-  QuerySearchDelegate(this.store);
+  QuerySearchDelegate({this.store, ActionsDispatcher dispatcher, this.movies, this.scrollController})
+      : streamController = StreamController<String>() {
+    dispatcher.ofType<SetMovies>().listen(_onNewResult);
+    Observable<String>(streamController.stream).debounceTime(const Duration(milliseconds: 500)).listen(_onNewQuery);
+  }
+
+  final StreamController<String> streamController;
+  final ScrollController scrollController;
   final Store<AppState> store;
+  List<Movie> movies;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -237,12 +266,33 @@ class QuerySearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     //print('buildSuggestions');
-    if (query != null) {
+    if (query.isNotEmpty) {
       // do the search
 
-      return const CircularProgressIndicator();
+      streamController.add(query);
+      return Container(
+        width: double.infinity,
+        child: const CircularProgressIndicator(),
+        alignment: AlignmentDirectional.topCenter,
+        margin: const EdgeInsets.all(16.0),
+      );
     } else {
-      return const Text('Suggestions');
+      return GridviewBuilder(
+        scrollController: scrollController,
+        context: context,
+        films: movies,
+      );
     }
+  }
+
+  void _onNewResult(SetMovies event) {
+    // clear the loading
+
+    // set the new movies
+    movies = event.films;
+  }
+
+  void _onNewQuery(String query) {
+    //store.dispatch(action)
   }
 }
