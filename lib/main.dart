@@ -28,6 +28,7 @@ void main() {
     initialState: AppState.initialState(),
     middleware: middleware.items,
   );
+
   runApp(BaseWidget(
     store: store,
     actionStream: actionController.stream,
