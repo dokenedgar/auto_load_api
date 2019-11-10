@@ -7,6 +7,8 @@ import 'package:flutter/widgets.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class FilterPage extends StatelessWidget {
+  final List<int> minimumRating = <int>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  final List<String> sortBy = <String>['title', 'year', 'rating', 'download_count', 'like_count', 'date_added'];
   final List<String> quality = <String>['720p', '1080p', '3D'];
   final List<String> genre = <String>[
     'action',
@@ -36,8 +38,6 @@ class FilterPage extends StatelessWidget {
     'war',
     'western'
   ];
-  final List<int> minimumRating = <int>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  final List<String> sortBy = <String>['title', 'year', 'rating', 'download_count', 'like_count', 'date_added'];
 
   @override
   Widget build(BuildContext context) {

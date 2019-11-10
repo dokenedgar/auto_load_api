@@ -13,25 +13,16 @@ class GridviewBuilder extends StatelessWidget {
   GridviewBuilder({
     Key key,
     @required ScrollController scrollController,
-    //  @required this.itemAspectRatio,
-    //  @required this.itemWidth,
     @required this.context,
     this.films,
   })  : _scrollController = scrollController,
         screenSize = MediaQuery.of(context).size,
-        // itemAspectRatio = itemWidth / itemHeight,
         super(key: key);
 
   final BuildContext context;
   final ScrollController _scrollController;
-
-  //final double itemAspectRatio;
-  // final double itemWidth;
   final Size screenSize;
   final int itemHeight = 420;
-
-  //final double itemWidth = screenSize.width / 2;
-
   final List<Movie> films;
 
   @override

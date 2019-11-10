@@ -62,11 +62,6 @@ class _ApiListState extends State<ApiList> {
 
   @override
   Widget build(BuildContext context) {
-    /*  final Size screenSize = MediaQuery.of(context).size;
-    const int itemHeight = 420;
-    final double itemWidth = screenSize.width / 2;
-    final double itemAspectRatio = itemWidth / itemHeight;
-*/
     return MoviesContainer(
       builder: (BuildContext context, List<Movie> films) {
         return Scaffold(
@@ -116,8 +111,6 @@ class _ApiListState extends State<ApiList> {
                 )
               : GridviewBuilder(
                   scrollController: _scrollController,
-                  // itemAspectRatio: itemAspectRatio,
-                  // itemWidth: itemWidth,
                   context: context,
                   films: films,
                 ),
