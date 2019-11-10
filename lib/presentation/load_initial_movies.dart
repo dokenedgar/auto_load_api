@@ -2,19 +2,17 @@
 //by 12:35 AM
 //on 30/Oct/2019
 
-import 'dart:async';
-
 import 'package:auto_load_api/actions/movies_action.dart';
 import 'package:auto_load_api/containers/movies_container.dart';
 import 'package:auto_load_api/main.dart';
 import 'package:auto_load_api/models/app_state.dart';
 import 'package:auto_load_api/models/movie.dart';
+import 'package:auto_load_api/presentation/filter_page.dart';
 import 'package:auto_load_api/presentation/movie_search.dart';
-import 'package:auto_load_api/route_constants.dart' as router;
+import 'package:auto_load_api/presentation/query_search_delegate.dart';
+import 'package:auto_load_api/presentation/widgets/gridview_builder.dart';
 import 'package:flutter/material.dart' hide showSearch, SearchDelegate;
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ApiList extends StatefulWidget {
   @override
@@ -68,261 +66,66 @@ class _ApiListState extends State<ApiList> {
     final double itemWidth = screenSize.width / 2;
     final double itemAspectRatio = itemWidth / itemHeight;
 */
-    return MoviesContainer(builder: (BuildContext context, List<Movie> films) {
-      return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: const Text('Get Data From An API'),
-          actions: <Widget>[
-            if (error)
+    return MoviesContainer(
+      builder: (BuildContext context, List<Movie> films) {
+        return Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: const Text('Get Data From An API'),
+            actions: <Widget>[
+              if (error)
+                IconButton(
+                  icon: Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      error = false;
+                      isLoading = true;
+                    });
+                    //fetch();
+                  },
+                ),
               IconButton(
-                icon: Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
-                ),
-                onPressed: () {
-                  setState(() {
-                    error = false;
-                    isLoading = true;
-                  });
-                  //fetch();
+                icon: Icon(Icons.search),
+                onPressed: () async {
+                  final String result = await showSearch<String>(
+                    context: context,
+                    delegate: QuerySearchDelegate(
+                      store: StoreProvider.of<AppState>(context),
+                      dispatcher: ActionsDispatcher.of(context),
+                      movies: films,
+                      scrollController: _scrollController,
+                    ),
+                  );
+
+                  print('result received:  $result');
                 },
-              ),
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () async {
-                final String result = await showSearch<String>(
-                  context: context,
-                  delegate: QuerySearchDelegate(
-                    store: StoreProvider.of<AppState>(context),
-                    dispatcher: ActionsDispatcher.of(context),
-                    movies: films,
-                    scrollController: _scrollController,
-                  ),
-                );
-
-                print('result received:  $result');
-              },
-            )
-          ],
-        ),
-        body: films.isEmpty
-            ? Center(
-                child: const CircularProgressIndicator(),
               )
-            : GridviewBuilder(
-                scrollController: _scrollController,
-                // itemAspectRatio: itemAspectRatio,
-                // itemWidth: itemWidth,
-                context: context,
-                films: films,
-              ),
-      );
-    });
-  }
-}
-
-class GridviewBuilder extends StatelessWidget {
-  GridviewBuilder({
-    Key key,
-    @required ScrollController scrollController,
-    //  @required this.itemAspectRatio,
-    //  @required this.itemWidth,
-    @required this.context,
-    this.films,
-  })  : _scrollController = scrollController,
-        screenSize = MediaQuery.of(context).size,
-        // itemAspectRatio = itemWidth / itemHeight,
-        super(key: key);
-
-  final BuildContext context;
-  final ScrollController _scrollController;
-
-  //final double itemAspectRatio;
-  // final double itemWidth;
-  final Size screenSize;
-  final int itemHeight = 420;
-
-  //final double itemWidth = screenSize.width / 2;
-
-  final List<Movie> films;
-
-  @override
-  Widget build(BuildContext context) {
-    final double itemWidth = screenSize.width / 2;
-    final double itemAspectRatio = itemWidth / itemHeight;
-    return GridView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.all(4.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: itemAspectRatio,
-      ),
-      itemCount: films.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Movie film = films[index];
-        return InkWell(
-          onTap: () {
-            StoreProvider.of<AppState>(context).dispatch(SelectedMovie(film));
-            return Navigator.pushNamed(
-              context,
-              router.AppRoutes.movieDetailRoute,
-            );
-          },
-          child: Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  height: itemWidth * (3 / 2),
-                  alignment: AlignmentDirectional.topCenter,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadiusDirectional.only(
-                      topStart: Radius.circular(4.0),
-                      topEnd: Radius.circular(4.0),
-                    ),
-                    image: DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      image: NetworkImage(
-                        film.image.isEmpty ? 'http://via.placeholder.com/300' : film.image,
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    margin: const EdgeInsetsDirectional.only(top: 16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          film.title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Wrap(
-                          alignment: WrapAlignment.center,
-                          children: List<Widget>.generate(
-                            film.genres.length,
-                            (int i) {
-                              return Text('${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            elevation: 2.0,
-            margin: const EdgeInsets.all(5.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+            ],
           ),
-        );
-      },
-    );
-  }
-}
-
-class QuerySearchDelegate extends SearchDelegate<String> {
-  QuerySearchDelegate({this.store, ActionsDispatcher dispatcher, this.movies, this.scrollController})
-      : streamController = StreamController<String>() {
-    dispatcher.ofType<SetMovies>().listen(_onNewResult);
-    sub = Observable<String>(streamController.stream)
-        .debounceTime(const Duration(seconds: 5))
-        .distinct()
-        .listen(_onNewQuery);
-  }
-
-  final StreamController<String> streamController;
-  final ScrollController scrollController;
-  final Store<AppState> store;
-  List<Movie> movies;
-  bool isLoading = false;
-  StreamSubscription<String> sub;
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      //CloseButton(),
-      if (query.trim().isNotEmpty)
-        IconButton(
-            icon: const Icon(Icons.close),
+          body: films.isEmpty
+              ? Center(
+                  child: const CircularProgressIndicator(),
+                )
+              : GridviewBuilder(
+                  scrollController: _scrollController,
+                  // itemAspectRatio: itemAspectRatio,
+                  // itemWidth: itemWidth,
+                  context: context,
+                  films: films,
+                ),
+          floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-              query = '';
-            }),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return null;
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    //print('buildResults');
-    return InkWell(
-      child: const Text('Result'),
-      onTap: () {
-        close(context, 'results');
+              Navigator.push<dynamic>(context,
+                  MaterialPageRoute<dynamic>(fullscreenDialog: true, builder: (BuildContext context) => FilterPage()));
+            },
+            label: Icon(Icons.filter_vintage),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        );
       },
     );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    //print('buildSuggestions');
-    if (query.trim().isNotEmpty) {
-      // do the search
-      streamController.add(query.trim());
-      if (isLoading) {
-        return Container(
-          width: double.infinity,
-          child: const CircularProgressIndicator(),
-          alignment: AlignmentDirectional.topCenter,
-          margin: const EdgeInsets.all(16.0),
-        );
-      } else {
-        return GridviewBuilder(
-          scrollController: scrollController,
-          context: context,
-          films: movies,
-        );
-      }
-    } else {
-      return GridviewBuilder(
-        scrollController: scrollController,
-        context: context,
-        films: movies,
-      );
-    }
-  }
-
-  void _onNewResult(SetMovies event) {
-    // clear the loading
-
-    // set the new movies
-    setState(() {
-      isLoading = false;
-      movies = event.films;
-    });
-  }
-
-  void _onNewQuery(String query) {
-    isLoading = true;
-    store.dispatch(SearchMovieGenre(query));
-  }
-
-  @override
-  void close(BuildContext context, String result) {
-    sub.cancel();
-    super.close(context, result);
   }
 }

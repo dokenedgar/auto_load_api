@@ -17,14 +17,17 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   factory AppState.initialState() {
     return _$AppState((AppStateBuilder b) {
-      b..films = ListBuilder<Movie>();
-      b..selectedMovie = null;
-      b..pageNumber = 1;
+      b
+        ..films = ListBuilder<Movie>()
+        ..selectedMovie = null
+        ..pageNumber = 1;
     });
   }
 
   BuiltList<Movie> get films;
+
   @nullable
   Movie get selectedMovie;
+
   int get pageNumber;
 }
