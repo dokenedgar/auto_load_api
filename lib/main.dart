@@ -48,7 +48,7 @@ class BaseWidget extends StatelessWidget {
         child: MaterialApp(
           //theme: ThemeData.dark(),
           theme: ThemeData(
-            primarySwatch: Colors.grey,
+            primarySwatch: Colors.deepPurple,
           ),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: router.generateRoute,

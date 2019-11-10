@@ -13,6 +13,7 @@ import 'package:auto_load_api/presentation/query_search_delegate.dart';
 import 'package:auto_load_api/presentation/widgets/gridview_builder.dart';
 import 'package:flutter/material.dart' hide showSearch, SearchDelegate;
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class ApiList extends StatefulWidget {
   @override
@@ -70,7 +71,11 @@ class _ApiListState extends State<ApiList> {
       builder: (BuildContext context, List<Movie> films) {
         return Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
+          appBar: GradientAppBar(
+            //celestial
+            backgroundColorStart: const Color.fromRGBO(195, 55, 100, 1.0),
+            backgroundColorEnd: const Color.fromRGBO(29, 38, 113, 1.0),
+
             title: const Text('Get Data From An API'),
             actions: <Widget>[
               if (error)

@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class FilterPage extends StatelessWidget {
   final List<String> quality = <String>['720p', '1080p', '3D'];
@@ -41,7 +42,9 @@ class FilterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
+        backgroundColorStart: const Color.fromRGBO(195, 55, 100, 1.0),
+        backgroundColorEnd: const Color.fromRGBO(29, 38, 113, 1.0),
         title: const Text('Filters'),
         actions: <Widget>[
           Center(
@@ -52,7 +55,6 @@ class FilterPage extends StatelessWidget {
                   'Apply',
                   style: TextStyle(
                     fontSize: 20.0,
-                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -124,10 +126,10 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
                 label: selectedItem == item
                     ? Text(
                         item.toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                       )
                     : Text(item.toString()),
-                selectedColor: Colors.amber,
+                selectedColor: const Color.fromRGBO(195, 55, 100, 1.0),
                 selected: widget.filterCategory.indexOf(item) == _value,
                 onSelected: (bool isSelected) {
                   setState(() {
