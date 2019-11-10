@@ -20,3 +20,8 @@ class ChangePageNumber {
 }
 
 class LoadMovies {}
+
+class SearchMovieGenre {
+  const SearchMovieGenre(this.genre);
+  final String genre;
+}

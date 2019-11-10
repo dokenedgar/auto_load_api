@@ -1,5 +1,5 @@
-import 'package:auto_load_api/actions/movies_action.dart';
-import 'package:auto_load_api/containers/movies_container.dart';
+import 'dart:async';
+
 import 'package:auto_load_api/data/yts_api.dart';
 import 'package:auto_load_api/middleware/app_middleware.dart';
 import 'package:auto_load_api/models/app_state.dart';
@@ -8,200 +8,77 @@ import 'package:auto_load_api/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:rxdart/rxdart.dart';
 
-import 'models/movie.dart';
 import 'route_constants.dart' as router;
 
 void main() {
   final HttpService ytsHttpService = HttpService('https://yts.lt/api/v2');
   final YtsMovieApi ytsMovieApi = YtsMovieApi(ytsHttpService);
   final AppMiddleware middleware = AppMiddleware(ytsMovieApi);
+
+  final StreamController<dynamic> actionController = StreamController<dynamic>.broadcast();
+
   final Store<AppState> store = Store<AppState>(
-    reducer,
+    //reducer,
+    (AppState state, dynamic action) {
+      actionController.add(action);
+      return reducer(state, action);
+    },
     initialState: AppState.initialState(),
     middleware: middleware.items,
   );
-  runApp(BaseWidget(store: store));
+  runApp(BaseWidget(
+    store: store,
+    actionStream: actionController.stream,
+  ));
 }
 
 class BaseWidget extends StatelessWidget {
-  const BaseWidget({Key key, this.store}) : super(key: key);
+  const BaseWidget({Key key, this.store, this.actionStream}) : super(key: key);
   final Store<AppState> store;
+  final Stream<dynamic> actionStream;
+
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<AppState>(
-      store: store,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: router.generateRoute,
-        initialRoute: router.AppRoutes.homeRoute,
+    return ActionsDispatcher(
+      actions: actionStream,
+      child: StoreProvider<AppState>(
+        store: store,
+        child: MaterialApp(
+          //theme: ThemeData.dark(),
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+          ),
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: router.generateRoute,
+          initialRoute: router.AppRoutes.homeRoute,
+        ),
       ),
     );
   }
 }
 
-class ApiList extends StatefulWidget {
-  @override
-  _ApiListState createState() => _ApiListState();
-}
+class ActionsDispatcher extends InheritedWidget {
+  const ActionsDispatcher({
+    Key key,
+    @required Widget child,
+    @required this.actions,
+  })  : assert(actions != null),
+        assert(child != null),
+        super(key: key, child: child);
 
-class _ApiListState extends State<ApiList> {
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isLoading = true;
-  bool error = false;
-
-  @override
-  void initState() {
-    super.initState();
-    //fetch();
-    _scrollController.addListener(_onScrollChanged);
+  static ActionsDispatcher of(BuildContext context) {
+    final ActionsDispatcher dispatcher = context.inheritFromWidgetOfExactType(ActionsDispatcher);
+    return dispatcher;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    StoreProvider.of<AppState>(context).dispatch(LoadMovies());
-  }
+  final Stream<dynamic> actions;
 
-  void _onScrollChanged() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      setState(() {
-        isLoading = true;
-      });
-
-      WidgetsBinding.instance.scheduleFrameCallback((_) => _scrollController
-          .animateTo(_scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.bounceInOut));
-      print(
-          'Loading Page => ${StoreProvider.of<AppState>(context).state.pageNumber}');
-      StoreProvider.of<AppState>(context).dispatch(LoadMovies());
-    }
-  }
+  Stream<T> ofType<T>() => Observable<dynamic>(actions).whereType<T>();
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    const int itemHeight = 420;
-    final double itemWidth = screenSize.width / 2;
-    final double itemAspectRatio = itemWidth / itemHeight;
-
-    return MoviesContainer(builder: (BuildContext context, List<Movie> films) {
-      return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: const Text('Get Data From An API'),
-          actions: <Widget>[
-            if (error)
-              IconButton(
-                icon: Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
-                ),
-                onPressed: () {
-                  setState(() {
-                    error = false;
-                    isLoading = true;
-                  });
-                  //fetch();
-                },
-              ),
-          ],
-        ),
-        body: films.isEmpty
-            ? Center(
-                child: const CircularProgressIndicator(),
-              )
-            : GridView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(4.0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: itemAspectRatio,
-                ),
-                itemCount: films.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Movie film = films[index];
-                  return InkWell(
-                    onTap: () {
-                      StoreProvider.of<AppState>(context)
-                          .dispatch(SelectedMovie(film));
-                      return Navigator.pushNamed(
-                        context,
-                        router.AppRoutes.movieDetailRoute,
-                      );
-                    },
-                    child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                            height: itemWidth * (3 / 2),
-                            alignment: AlignmentDirectional.topCenter,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadiusDirectional.only(
-                                topStart: Radius.circular(4.0),
-                                topEnd: Radius.circular(4.0),
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.fitHeight,
-                                image: NetworkImage(
-                                  film.image.isEmpty
-                                      ? 'http://via.placeholder.com/300'
-                                      : film.image,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: Container(
-                              margin:
-                                  const EdgeInsetsDirectional.only(top: 16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    film.title,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Wrap(
-                                    alignment: WrapAlignment.center,
-                                    children: List<Widget>.generate(
-                                      film.genres.length,
-                                      (int i) {
-                                        return Text(
-                                            '${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      elevation: 2.0,
-                      margin: const EdgeInsets.all(5.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  );
-                },
-              ),
-      );
-    });
+  bool updateShouldNotify(InheritedWidget oldWidget) {
+    return false;
   }
 }
