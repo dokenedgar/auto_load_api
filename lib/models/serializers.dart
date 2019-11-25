@@ -6,6 +6,7 @@ library serializers;
 import 'package:auto_load_api/models/movie.dart';
 import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
 import 'package:auto_load_api/models/movie_genre.dart';
+import 'package:auto_load_api/models/movie_quality.dart';
 import 'package:auto_load_api/models/movie_sort_by.dart';
 import 'package:auto_load_api/models/torrents.dart';
 import 'package:built_collection/built_collection.dart';
@@ -22,6 +23,7 @@ Serializers serializers = (_$serializers.toBuilder() //
       ..add(MovieGenre.serializer)
       ..add(MovieSortBy.serializer)
       ..add(MovieFilterByRating.serializer)
+      ..add(MovieQuality.serializer)
       ..addPlugin(StandardJsonPlugin()) //
     )
     .build();

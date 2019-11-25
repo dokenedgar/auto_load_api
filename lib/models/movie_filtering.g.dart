@@ -19,6 +19,10 @@ class _$FilterOptions extends FilterOptions {
   final BuiltList<MovieGenre> genreOptions;
   @override
   final MovieGenre genre;
+  @override
+  final BuiltList<MovieQuality> qualityOptions;
+  @override
+  final MovieQuality quality;
 
   factory _$FilterOptions([void Function(FilterOptionsBuilder) updates]) =>
       (new FilterOptionsBuilder()..update(updates)).build();
@@ -29,7 +33,9 @@ class _$FilterOptions extends FilterOptions {
       this.ratingsOptions,
       this.minimum_rating,
       this.genreOptions,
-      this.genre})
+      this.genre,
+      this.qualityOptions,
+      this.quality})
       : super._() {
     if (sortByOptions == null) {
       throw new BuiltValueNullFieldError('FilterOptions', 'sortByOptions');
@@ -39,6 +45,9 @@ class _$FilterOptions extends FilterOptions {
     }
     if (genreOptions == null) {
       throw new BuiltValueNullFieldError('FilterOptions', 'genreOptions');
+    }
+    if (qualityOptions == null) {
+      throw new BuiltValueNullFieldError('FilterOptions', 'qualityOptions');
     }
   }
 
@@ -58,7 +67,9 @@ class _$FilterOptions extends FilterOptions {
         ratingsOptions == other.ratingsOptions &&
         minimum_rating == other.minimum_rating &&
         genreOptions == other.genreOptions &&
-        genre == other.genre;
+        genre == other.genre &&
+        qualityOptions == other.qualityOptions &&
+        quality == other.quality;
   }
 
   @override
@@ -66,11 +77,17 @@ class _$FilterOptions extends FilterOptions {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, sortByOptions.hashCode), sortBy.hashCode),
-                    ratingsOptions.hashCode),
-                minimum_rating.hashCode),
-            genreOptions.hashCode),
-        genre.hashCode));
+                $jc(
+                    $jc(
+                        $jc(
+                            $jc($jc(0, sortByOptions.hashCode),
+                                sortBy.hashCode),
+                            ratingsOptions.hashCode),
+                        minimum_rating.hashCode),
+                    genreOptions.hashCode),
+                genre.hashCode),
+            qualityOptions.hashCode),
+        quality.hashCode));
   }
 
   @override
@@ -81,7 +98,9 @@ class _$FilterOptions extends FilterOptions {
           ..add('ratingsOptions', ratingsOptions)
           ..add('minimum_rating', minimum_rating)
           ..add('genreOptions', genreOptions)
-          ..add('genre', genre))
+          ..add('genre', genre)
+          ..add('qualityOptions', qualityOptions)
+          ..add('quality', quality))
         .toString();
   }
 }
@@ -121,6 +140,16 @@ class FilterOptionsBuilder
   MovieGenre get genre => _$this._genre;
   set genre(MovieGenre genre) => _$this._genre = genre;
 
+  ListBuilder<MovieQuality> _qualityOptions;
+  ListBuilder<MovieQuality> get qualityOptions =>
+      _$this._qualityOptions ??= new ListBuilder<MovieQuality>();
+  set qualityOptions(ListBuilder<MovieQuality> qualityOptions) =>
+      _$this._qualityOptions = qualityOptions;
+
+  MovieQuality _quality;
+  MovieQuality get quality => _$this._quality;
+  set quality(MovieQuality quality) => _$this._quality = quality;
+
   FilterOptionsBuilder();
 
   FilterOptionsBuilder get _$this {
@@ -131,6 +160,8 @@ class FilterOptionsBuilder
       _minimum_rating = _$v.minimum_rating;
       _genreOptions = _$v.genreOptions?.toBuilder();
       _genre = _$v.genre;
+      _qualityOptions = _$v.qualityOptions?.toBuilder();
+      _quality = _$v.quality;
       _$v = null;
     }
     return this;
@@ -160,7 +191,9 @@ class FilterOptionsBuilder
               ratingsOptions: ratingsOptions.build(),
               minimum_rating: minimum_rating,
               genreOptions: genreOptions.build(),
-              genre: genre);
+              genre: genre,
+              qualityOptions: qualityOptions.build(),
+              quality: quality);
     } catch (_) {
       String _$failedField;
       try {
@@ -172,6 +205,9 @@ class FilterOptionsBuilder
 
         _$failedField = 'genreOptions';
         genreOptions.build();
+
+        _$failedField = 'qualityOptions';
+        qualityOptions.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'FilterOptions', _$failedField, e.toString());

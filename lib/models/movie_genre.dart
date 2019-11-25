@@ -81,7 +81,7 @@ class MovieGenreSerializer implements PrimitiveSerializer<MovieGenre> {
   final Iterable<Type> types = BuiltList<Type>(<Type>[MovieGenre]);
 
   @override
-  final String wireName = 'MovieFilterByRating';
+  final String wireName = 'MovieGenre';
 
   @override
   Object serialize(Serializers serializers, MovieGenre object,

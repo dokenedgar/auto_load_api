@@ -14,28 +14,19 @@ class _$AppState extends AppState {
   @override
   final int pageNumber;
   @override
-  final String quality;
-  @override
   final FilterOptions filterOptions;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
   _$AppState._(
-      {this.films,
-      this.selectedMovie,
-      this.pageNumber,
-      this.quality,
-      this.filterOptions})
+      {this.films, this.selectedMovie, this.pageNumber, this.filterOptions})
       : super._() {
     if (films == null) {
       throw new BuiltValueNullFieldError('AppState', 'films');
     }
     if (pageNumber == null) {
       throw new BuiltValueNullFieldError('AppState', 'pageNumber');
-    }
-    if (quality == null) {
-      throw new BuiltValueNullFieldError('AppState', 'quality');
     }
     if (filterOptions == null) {
       throw new BuiltValueNullFieldError('AppState', 'filterOptions');
@@ -56,17 +47,14 @@ class _$AppState extends AppState {
         films == other.films &&
         selectedMovie == other.selectedMovie &&
         pageNumber == other.pageNumber &&
-        quality == other.quality &&
         filterOptions == other.filterOptions;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc(
-            $jc($jc($jc(0, films.hashCode), selectedMovie.hashCode),
-                pageNumber.hashCode),
-            quality.hashCode),
+        $jc($jc($jc(0, films.hashCode), selectedMovie.hashCode),
+            pageNumber.hashCode),
         filterOptions.hashCode));
   }
 
@@ -76,7 +64,6 @@ class _$AppState extends AppState {
           ..add('films', films)
           ..add('selectedMovie', selectedMovie)
           ..add('pageNumber', pageNumber)
-          ..add('quality', quality)
           ..add('filterOptions', filterOptions))
         .toString();
   }
@@ -99,10 +86,6 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   int get pageNumber => _$this._pageNumber;
   set pageNumber(int pageNumber) => _$this._pageNumber = pageNumber;
 
-  String _quality;
-  String get quality => _$this._quality;
-  set quality(String quality) => _$this._quality = quality;
-
   FilterOptionsBuilder _filterOptions;
   FilterOptionsBuilder get filterOptions =>
       _$this._filterOptions ??= new FilterOptionsBuilder();
@@ -116,7 +99,6 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _films = _$v.films?.toBuilder();
       _selectedMovie = _$v.selectedMovie?.toBuilder();
       _pageNumber = _$v.pageNumber;
-      _quality = _$v.quality;
       _filterOptions = _$v.filterOptions?.toBuilder();
       _$v = null;
     }
@@ -145,7 +127,6 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               films: films.build(),
               selectedMovie: _selectedMovie?.build(),
               pageNumber: pageNumber,
-              quality: quality,
               filterOptions: filterOptions.build());
     } catch (_) {
       String _$failedField;

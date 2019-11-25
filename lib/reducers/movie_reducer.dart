@@ -29,7 +29,7 @@ AppState _setGenre(AppState state, SetGenre action) {
 }
 
 AppState _setQuality(AppState state, SetQuality action) =>
-    state.rebuild((AppStateBuilder b) => b.quality = action.quality);
+    state.rebuild((AppStateBuilder b) => b.filterOptions.quality = action.quality);
 
 //AppState _setSortBy(AppState state, SetSortBy action) => state.rebuild((AppStateBuilder b) => b.sortBy = action.sortBy);
 AppState _setSortBy(AppState state, SetSortBy action) =>

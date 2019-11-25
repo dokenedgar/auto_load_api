@@ -6,6 +6,7 @@ import 'package:auto_load_api/actions/movies_action.dart';
 import 'package:auto_load_api/models/app_state.dart';
 import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
 import 'package:auto_load_api/models/movie_genre.dart';
+import 'package:auto_load_api/models/movie_quality.dart';
 import 'package:auto_load_api/models/movie_sort_by.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -175,7 +176,12 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
         StoreProvider.of<AppState>(context).dispatch(SetGenre(selectedGenre));
         break;
       case 'quality':
-        StoreProvider.of<AppState>(context).dispatch(SetQuality(filterValue));
+        final MovieQuality selectedQuality = StoreProvider.of<AppState>(context)
+            .state
+            .filterOptions
+            .qualityOptions
+            .firstWhere((MovieQuality element) => element.toString() == filterValue);
+        StoreProvider.of<AppState>(context).dispatch(SetQuality(selectedQuality));
         break;
       case 'sortBy':
         final MovieSortBy selectedOption = StoreProvider.of<AppState>(context)

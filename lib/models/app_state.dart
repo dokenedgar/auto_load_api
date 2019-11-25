@@ -23,7 +23,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
         ..selectedMovie = null
         ..pageNumber = 1
         //..genre = 'all'
-        ..quality = 'all'
+        //..quality = 'all'
         ..filterOptions = FilterOptions.initialState().toBuilder();
     });
   }
@@ -37,7 +37,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   //String get genre;
 
-  String get quality;
+  //String get quality;
 
   FilterOptions get filterOptions;
 }
