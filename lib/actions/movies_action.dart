@@ -4,6 +4,7 @@
 
 import 'package:auto_load_api/models/movie.dart';
 import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
+import 'package:auto_load_api/models/movie_genre.dart';
 import 'package:auto_load_api/models/movie_sort_by.dart';
 
 class SetMovies {
@@ -35,7 +36,7 @@ class SearchMovieGenre {
 class SetGenre {
   const SetGenre(this.genre);
 
-  final String genre;
+  final MovieGenre genre;
 }
 
 class SetQuality {

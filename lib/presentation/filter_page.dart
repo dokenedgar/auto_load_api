@@ -5,6 +5,7 @@
 import 'package:auto_load_api/actions/movies_action.dart';
 import 'package:auto_load_api/models/app_state.dart';
 import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
+import 'package:auto_load_api/models/movie_genre.dart';
 import 'package:auto_load_api/models/movie_sort_by.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -166,7 +167,12 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
   void updateFilter(BuildContext context, String filterCategory, dynamic filterValue) {
     switch (filterCategory) {
       case 'genre':
-        StoreProvider.of<AppState>(context).dispatch(SetGenre(filterValue));
+        final MovieGenre selectedGenre = StoreProvider.of<AppState>(context)
+            .state
+            .filterOptions
+            .genreOptions
+            .firstWhere((MovieGenre element) => element.toString() == filterValue);
+        StoreProvider.of<AppState>(context).dispatch(SetGenre(selectedGenre));
         break;
       case 'quality':
         StoreProvider.of<AppState>(context).dispatch(SetQuality(filterValue));
@@ -178,7 +184,6 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
             .sortByOptions
             .firstWhere((MovieSortBy el) => el.toString() == filterValue);
         StoreProvider.of<AppState>(context).dispatch(SetSortBy(selectedOption));
-        print(StoreProvider.of<AppState>(context).state.filterOptions.sortBy);
         break;
       case 'minimumRating':
         final MovieFilterByRating selectedRating = StoreProvider.of<AppState>(context)

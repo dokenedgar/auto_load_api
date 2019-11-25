@@ -25,7 +25,7 @@ AppState _changePageNumber(AppState state, ChangePageNumber action) {
 }
 
 AppState _setGenre(AppState state, SetGenre action) {
-  return state.rebuild((AppStateBuilder b) => b.genre = action.genre);
+  return state.rebuild((AppStateBuilder b) => b.filterOptions.genre = action.genre);
 }
 
 AppState _setQuality(AppState state, SetQuality action) =>

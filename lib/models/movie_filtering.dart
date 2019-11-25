@@ -5,6 +5,7 @@
 library movie_filtering;
 
 import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
+import 'package:auto_load_api/models/movie_genre.dart';
 import 'package:auto_load_api/models/movie_sort_by.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -20,8 +21,8 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
     return _$FilterOptions((FilterOptionsBuilder b) {
       b
         ..sortByOptions = ListBuilder<MovieSortBy>(MovieSortBy.values)
-        ..ratingsOptions = ListBuilder<MovieFilterByRating>(MovieFilterByRating.values);
-      print(b.sortBy);
+        ..ratingsOptions = ListBuilder<MovieFilterByRating>(MovieFilterByRating.values)
+        ..genreOptions = ListBuilder<MovieGenre>(MovieGenre.values);
     });
   }
 
@@ -34,4 +35,9 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
 
   @nullable
   MovieFilterByRating get minimum_rating;
+
+  BuiltList<MovieGenre> get genreOptions;
+
+  @nullable
+  MovieGenre get genre;
 }
