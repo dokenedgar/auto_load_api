@@ -2,8 +2,11 @@
 //by 2:21 AM
 //on 08/Nov/2019
 
+import 'package:auto_load_api/actions/movies_action.dart';
+import 'package:auto_load_api/models/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class FilterPage extends StatelessWidget {
@@ -41,11 +44,16 @@ class FilterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //print(StoreProvider.of<AppState>(context).state.genre);
     return Scaffold(
       appBar: GradientAppBar(
         backgroundColorStart: const Color.fromRGBO(195, 55, 100, 1.0),
         backgroundColorEnd: const Color.fromRGBO(29, 38, 113, 1.0),
         title: const Text('Filters'),
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () => Navigator.pop(context, false),
+        ),
         actions: <Widget>[
           Center(
             child: Padding(
@@ -59,8 +67,9 @@ class FilterPage extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  print('save');
-                  Navigator.pop(context);
+                  //print('save');
+                  // method that saves selections to Store
+                  Navigator.pop(context, 'Apply Clicked');
                 },
               ),
             ),
@@ -135,12 +144,30 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
                   setState(() {
                     selectedItem = item;
                     _value = widget.filterCategory.indexOf(item);
-                    print(widget.filterCategory.indexOf(item));
-                    print('selected category is: ${widget.categoryName} and selected item is: $selectedItem');
+                    //print(widget.filterCategory.indexOf(item));
+                    //print('selected category is: ${widget.categoryName} and selected item is: $selectedItem');
                   });
+                  updateFilter(context, widget.categoryName, item);
                 },
               ))
           .toList(),
     );
+  }
+
+  void updateFilter(BuildContext context, String filterCategory, dynamic filterValue) {
+    switch (filterCategory) {
+      case 'genre':
+        StoreProvider.of<AppState>(context).dispatch(SetGenre(filterValue));
+        break;
+      case 'quality':
+        StoreProvider.of<AppState>(context).dispatch(SetQuality(filterValue));
+        break;
+      case 'sortBy':
+        StoreProvider.of<AppState>(context).dispatch(SetSortBy(filterValue));
+        break;
+      case 'minimumRating':
+        StoreProvider.of<AppState>(context).dispatch(SetMinRating(filterValue));
+        break;
+    }
   }
 }

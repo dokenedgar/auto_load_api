@@ -13,6 +13,10 @@ class YtsMovieApi {
   Future<List<Movie>> getMovies(int pageNumber, {String genre = 'all'}) async {
     final dynamic data = await http.get('/list_movies.json?genre=$genre&page=$pageNumber');
 
+    //final Map<String, dynamic> query;
+
+    // query.keys.map((key) => '$key=${query[key]}').join('&');
+
     final dynamic movieData = data['data'];
     return movieData == null
         ? <Movie>[]

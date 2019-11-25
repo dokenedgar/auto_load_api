@@ -4,6 +4,7 @@
 library serializers;
 
 import 'package:auto_load_api/models/movie.dart';
+import 'package:auto_load_api/models/movie_sort_by.dart';
 import 'package:auto_load_api/models/torrents.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
@@ -16,6 +17,7 @@ part 'serializers.g.dart';
   Torrent,
 ])
 Serializers serializers = (_$serializers.toBuilder() //
+      ..add(MovieSortBy.serializer)
       ..addPlugin(StandardJsonPlugin()) //
     )
     .build();

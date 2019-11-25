@@ -25,3 +25,23 @@ class SearchMovieGenre {
   const SearchMovieGenre(this.genre);
   final String genre;
 }
+
+class SetGenre {
+  const SetGenre(this.genre);
+  final String genre;
+}
+
+class SetQuality {
+  const SetQuality(this.quality);
+  final String quality;
+}
+
+class SetSortBy {
+  const SetSortBy(this.sortBy);
+  final String sortBy;
+}
+
+class SetMinRating {
+  const SetMinRating(this.minRating);
+  final int minRating;
+}
