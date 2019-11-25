@@ -121,12 +121,7 @@ class _ApiListState extends State<ApiList> {
                   MaterialPageRoute<dynamic>(
                       fullscreenDialog: true, builder: (BuildContext context) => FilterPage()));
               if (result.runtimeType == String) {
-                /*print(StoreProvider.of<AppState>(context).state.genre);
-                print(StoreProvider.of<AppState>(context).state.quality);
-                print(StoreProvider.of<AppState>(context).state.sortBy);
-                print(StoreProvider.of<AppState>(context).state.minimumRating);
-                 */
-                //print(StoreProvider.of<AppState>(context).state.filterOptions);
+                print(StoreProvider.of<AppState>(context).state.filterOptions);
                 //perform query and reset state
               } else {
                 print('$result EMPTY RES');

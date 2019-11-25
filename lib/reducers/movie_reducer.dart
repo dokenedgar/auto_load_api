@@ -31,10 +31,12 @@ AppState _setGenre(AppState state, SetGenre action) {
 AppState _setQuality(AppState state, SetQuality action) =>
     state.rebuild((AppStateBuilder b) => b.quality = action.quality);
 
-AppState _setSortBy(AppState state, SetSortBy action) => state.rebuild((AppStateBuilder b) => b.sortBy = action.sortBy);
+//AppState _setSortBy(AppState state, SetSortBy action) => state.rebuild((AppStateBuilder b) => b.sortBy = action.sortBy);
+AppState _setSortBy(AppState state, SetSortBy action) =>
+    state.rebuild((AppStateBuilder b) => b.filterOptions.sortBy = action.sortBy);
 
 AppState _setMinRating(AppState state, SetMinRating action) =>
-    state.rebuild((AppStateBuilder b) => b.minimumRating = action.minRating);
+    state.rebuild((AppStateBuilder b) => b.filterOptions.minimum_rating = action.minRating);
 
 final Reducer<AppState> reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, SetMovies>(_setMovies),

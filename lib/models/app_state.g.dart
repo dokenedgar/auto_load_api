@@ -18,10 +18,6 @@ class _$AppState extends AppState {
   @override
   final String quality;
   @override
-  final String sortBy;
-  @override
-  final int minimumRating;
-  @override
   final FilterOptions filterOptions;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
@@ -33,8 +29,6 @@ class _$AppState extends AppState {
       this.pageNumber,
       this.genre,
       this.quality,
-      this.sortBy,
-      this.minimumRating,
       this.filterOptions})
       : super._() {
     if (films == null) {
@@ -48,12 +42,6 @@ class _$AppState extends AppState {
     }
     if (quality == null) {
       throw new BuiltValueNullFieldError('AppState', 'quality');
-    }
-    if (sortBy == null) {
-      throw new BuiltValueNullFieldError('AppState', 'sortBy');
-    }
-    if (minimumRating == null) {
-      throw new BuiltValueNullFieldError('AppState', 'minimumRating');
     }
     if (filterOptions == null) {
       throw new BuiltValueNullFieldError('AppState', 'filterOptions');
@@ -76,8 +64,6 @@ class _$AppState extends AppState {
         pageNumber == other.pageNumber &&
         genre == other.genre &&
         quality == other.quality &&
-        sortBy == other.sortBy &&
-        minimumRating == other.minimumRating &&
         filterOptions == other.filterOptions;
   }
 
@@ -86,14 +72,10 @@ class _$AppState extends AppState {
     return $jf($jc(
         $jc(
             $jc(
-                $jc(
-                    $jc(
-                        $jc($jc($jc(0, films.hashCode), selectedMovie.hashCode),
-                            pageNumber.hashCode),
-                        genre.hashCode),
-                    quality.hashCode),
-                sortBy.hashCode),
-            minimumRating.hashCode),
+                $jc($jc($jc(0, films.hashCode), selectedMovie.hashCode),
+                    pageNumber.hashCode),
+                genre.hashCode),
+            quality.hashCode),
         filterOptions.hashCode));
   }
 
@@ -105,8 +87,6 @@ class _$AppState extends AppState {
           ..add('pageNumber', pageNumber)
           ..add('genre', genre)
           ..add('quality', quality)
-          ..add('sortBy', sortBy)
-          ..add('minimumRating', minimumRating)
           ..add('filterOptions', filterOptions))
         .toString();
   }
@@ -137,14 +117,6 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   String get quality => _$this._quality;
   set quality(String quality) => _$this._quality = quality;
 
-  String _sortBy;
-  String get sortBy => _$this._sortBy;
-  set sortBy(String sortBy) => _$this._sortBy = sortBy;
-
-  int _minimumRating;
-  int get minimumRating => _$this._minimumRating;
-  set minimumRating(int minimumRating) => _$this._minimumRating = minimumRating;
-
   FilterOptionsBuilder _filterOptions;
   FilterOptionsBuilder get filterOptions =>
       _$this._filterOptions ??= new FilterOptionsBuilder();
@@ -160,8 +132,6 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _pageNumber = _$v.pageNumber;
       _genre = _$v.genre;
       _quality = _$v.quality;
-      _sortBy = _$v.sortBy;
-      _minimumRating = _$v.minimumRating;
       _filterOptions = _$v.filterOptions?.toBuilder();
       _$v = null;
     }
@@ -192,8 +162,6 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               pageNumber: pageNumber,
               genre: genre,
               quality: quality,
-              sortBy: sortBy,
-              minimumRating: minimumRating,
               filterOptions: filterOptions.build());
     } catch (_) {
       String _$failedField;

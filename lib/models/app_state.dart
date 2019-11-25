@@ -24,8 +24,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
         ..pageNumber = 1
         ..genre = 'all'
         ..quality = 'all'
-        ..sortBy = 'date_added'
-        ..minimumRating = 0
         ..filterOptions = FilterOptions.initialState().toBuilder();
     });
   }
@@ -40,10 +38,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   String get genre;
 
   String get quality;
-
-  String get sortBy;
-
-  int get minimumRating;
 
   FilterOptions get filterOptions;
 }

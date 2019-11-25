@@ -4,6 +4,8 @@
 
 import 'package:auto_load_api/actions/movies_action.dart';
 import 'package:auto_load_api/models/app_state.dart';
+import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
+import 'package:auto_load_api/models/movie_sort_by.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -11,7 +13,14 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class FilterPage extends StatelessWidget {
   final List<int> minimumRating = <int>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  final List<String> sortBy = <String>['title', 'year', 'rating', 'download_count', 'like_count', 'date_added'];
+  final List<String> sortBy = <String>[
+    'title',
+    'year',
+    'rating',
+    'download_count',
+    'like_count',
+    'date_added'
+  ];
   final List<String> quality = <String>['720p', '1080p', '3D'];
   final List<String> genre = <String>[
     'action',
@@ -163,10 +172,21 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
         StoreProvider.of<AppState>(context).dispatch(SetQuality(filterValue));
         break;
       case 'sortBy':
-        StoreProvider.of<AppState>(context).dispatch(SetSortBy(filterValue));
+        final MovieSortBy selectedOption = StoreProvider.of<AppState>(context)
+            .state
+            .filterOptions
+            .sortByOptions
+            .firstWhere((MovieSortBy el) => el.toString() == filterValue);
+        StoreProvider.of<AppState>(context).dispatch(SetSortBy(selectedOption));
+        print(StoreProvider.of<AppState>(context).state.filterOptions.sortBy);
         break;
       case 'minimumRating':
-        StoreProvider.of<AppState>(context).dispatch(SetMinRating(filterValue));
+        final MovieFilterByRating selectedRating = StoreProvider.of<AppState>(context)
+            .state
+            .filterOptions
+            .ratingsOptions
+            .firstWhere((MovieFilterByRating el) => el.getValue() == filterValue);
+        StoreProvider.of<AppState>(context).dispatch(SetMinRating(selectedRating));
         break;
     }
   }
