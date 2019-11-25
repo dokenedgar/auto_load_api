@@ -47,4 +47,13 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
 
   @nullable
   MovieQuality get quality;
+
+  List<dynamic> getQueryOptions() {
+    return <dynamic>[
+      if (genre != null) genre,
+      if (minimum_rating != null) minimum_rating,
+      if (quality != null) quality,
+      if (sortBy != null) sortBy,
+    ].toList();
+  }
 }
