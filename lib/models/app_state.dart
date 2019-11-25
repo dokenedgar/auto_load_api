@@ -5,6 +5,7 @@
 library app_state;
 
 import 'package:auto_load_api/models/movie.dart';
+import 'package:auto_load_api/models/movie_filtering.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 
@@ -20,7 +21,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       b
         ..films = ListBuilder<Movie>()
         ..selectedMovie = null
-        ..pageNumber = 1;
+        ..pageNumber = 1
+        ..genre = 'all'
+        ..quality = 'all'
+        ..filterOptions = FilterOptions.initialState().toBuilder();
     });
   }
 
@@ -30,4 +34,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   Movie get selectedMovie;
 
   int get pageNumber;
+
+  String get genre;
+
+  String get quality;
+
+  FilterOptions get filterOptions;
 }

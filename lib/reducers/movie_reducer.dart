@@ -24,8 +24,26 @@ AppState _changePageNumber(AppState state, ChangePageNumber action) {
   });
 }
 
+AppState _setGenre(AppState state, SetGenre action) {
+  return state.rebuild((AppStateBuilder b) => b.genre = action.genre);
+}
+
+AppState _setQuality(AppState state, SetQuality action) =>
+    state.rebuild((AppStateBuilder b) => b.quality = action.quality);
+
+//AppState _setSortBy(AppState state, SetSortBy action) => state.rebuild((AppStateBuilder b) => b.sortBy = action.sortBy);
+AppState _setSortBy(AppState state, SetSortBy action) =>
+    state.rebuild((AppStateBuilder b) => b.filterOptions.sortBy = action.sortBy);
+
+AppState _setMinRating(AppState state, SetMinRating action) =>
+    state.rebuild((AppStateBuilder b) => b.filterOptions.minimum_rating = action.minRating);
+
 final Reducer<AppState> reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, SetMovies>(_setMovies),
   TypedReducer<AppState, SelectedMovie>(_setSelectedMovie),
   TypedReducer<AppState, ChangePageNumber>(_changePageNumber),
+  TypedReducer<AppState, SetGenre>(_setGenre),
+  TypedReducer<AppState, SetQuality>(_setQuality),
+  TypedReducer<AppState, SetSortBy>(_setSortBy),
+  TypedReducer<AppState, SetMinRating>(_setMinRating),
 ]);

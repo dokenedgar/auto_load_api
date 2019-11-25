@@ -2,19 +2,7 @@
 //by 10:41 AM
 //on 23/Oct/2019
 
-import 'dart:convert';
-
-import 'package:auto_load_api/actions/movies_action.dart';
-import 'package:auto_load_api/data/yts_api.dart';
-import 'package:auto_load_api/middleware/app_middleware.dart';
-import 'package:auto_load_api/models/app_state.dart';
-import 'package:auto_load_api/models/movie.dart';
-import 'package:mockito/mockito.dart';
-import 'package:redux/redux.dart';
-import 'package:test/test.dart';
-
-import '../res/res.dart';
-
+/*
 void main() {
   tearDown(resetMockitoState);
   test('loadMovies', () async {
@@ -57,3 +45,4 @@ class MockYtsApi extends Mock implements YtsMovieApi {}
 class MockAppState extends Mock implements AppState {}
 
 class MockStore extends Mock implements Store<AppState> {}
+*/
