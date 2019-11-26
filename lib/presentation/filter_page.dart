@@ -14,48 +14,17 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class FilterPage extends StatelessWidget {
-  final List<int> minimumRating = <int>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  final List<String> sortBy = <String>[
-    'title',
-    'year',
-    'rating',
-    'download_count',
-    'like_count',
-    'date_added'
-  ];
-  final List<String> quality = <String>['720p', '1080p', '3D'];
-  final List<String> genre = <String>[
-    'action',
-    'adventure',
-    'animation',
-    'biography',
-    'comedy',
-    'crime',
-    'documentary',
-    'drama',
-    'family',
-    'fantasy',
-    'film-noir',
-    'game-show',
-    'history',
-    'horror',
-    'music',
-    'musical',
-    'mystery',
-    'news',
-    'reality-tv',
-    'romance',
-    'sci-fi',
-    'sport',
-    'talk-show',
-    'thriller',
-    'war',
-    'western'
-  ];
-
   @override
   Widget build(BuildContext context) {
-    //print(StoreProvider.of<AppState>(context).state.genre);
+    final List<MovieGenre> genre =
+        StoreProvider.of<AppState>(context).state.filterOptions.genreOptions.toList();
+    final List<MovieFilterByRating> minimumRating =
+        StoreProvider.of<AppState>(context).state.filterOptions.ratingsOptions.toList();
+    final List<MovieSortBy> sortBy =
+        StoreProvider.of<AppState>(context).state.filterOptions.sortByOptions.toList();
+    final List<MovieQuality> quality =
+        StoreProvider.of<AppState>(context).state.filterOptions.qualityOptions.toList();
+
     return Scaffold(
       appBar: GradientAppBar(
         backgroundColorStart: const Color.fromRGBO(195, 55, 100, 1.0),
@@ -145,18 +114,16 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
           .map((dynamic item) => FilterChip(
                 label: selectedItem == item
                     ? Text(
-                        item.toString(),
+                        item.toString().replaceAll(RegExp('_'), ' '),
                         style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                       )
-                    : Text(item.toString()),
+                    : Text(item.toString().replaceAll(RegExp('_'), ' ')),
                 selectedColor: const Color.fromRGBO(195, 55, 100, 1.0),
                 selected: widget.filterCategory.indexOf(item) == _value,
                 onSelected: (bool isSelected) {
                   setState(() {
                     selectedItem = item;
                     _value = widget.filterCategory.indexOf(item);
-                    //print(widget.filterCategory.indexOf(item));
-                    //print('selected category is: ${widget.categoryName} and selected item is: $selectedItem');
                   });
                   updateFilter(context, widget.categoryName, item);
                 },
@@ -166,13 +133,14 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
   }
 
   void updateFilter(BuildContext context, String filterCategory, dynamic filterValue) {
+    print(filterValue.runtimeType);
     switch (filterCategory) {
       case 'genre':
         final MovieGenre selectedGenre = StoreProvider.of<AppState>(context)
             .state
             .filterOptions
             .genreOptions
-            .firstWhere((MovieGenre element) => element.toString() == filterValue);
+            .firstWhere((MovieGenre element) => element.toString() == filterValue.toString());
         StoreProvider.of<AppState>(context).dispatch(SetGenre(selectedGenre));
         break;
       case 'quality':
@@ -180,7 +148,7 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
             .state
             .filterOptions
             .qualityOptions
-            .firstWhere((MovieQuality element) => element.toString() == filterValue);
+            .firstWhere((MovieQuality element) => element.toString() == filterValue.toString());
         StoreProvider.of<AppState>(context).dispatch(SetQuality(selectedQuality));
         break;
       case 'sortBy':
@@ -188,7 +156,7 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
             .state
             .filterOptions
             .sortByOptions
-            .firstWhere((MovieSortBy el) => el.toString() == filterValue);
+            .firstWhere((MovieSortBy el) => el.toString() == filterValue.toString());
         StoreProvider.of<AppState>(context).dispatch(SetSortBy(selectedOption));
         break;
       case 'minimumRating':
@@ -196,8 +164,10 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
             .state
             .filterOptions
             .ratingsOptions
-            .firstWhere((MovieFilterByRating el) => el.getValue() == filterValue);
+            .firstWhere((MovieFilterByRating el) => el.getValue() == filterValue.getValue());
         StoreProvider.of<AppState>(context).dispatch(SetMinRating(selectedRating));
+        //StoreProvider.of<AppState>(context)
+        //   .dispatch(SetMinRating('minimum_rating', selectedRating));
         break;
     }
   }

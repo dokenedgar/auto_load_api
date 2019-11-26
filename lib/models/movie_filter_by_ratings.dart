@@ -21,6 +21,8 @@ class MovieFilterByRating {
   static const MovieFilterByRating eight = MovieFilterByRating._(8);
   static const MovieFilterByRating nine = MovieFilterByRating._(9);
 
+  String get filterCategory => 'minimum_rating';
+
   static const List<MovieFilterByRating> values = <MovieFilterByRating>[
     zero,
     one,

@@ -36,7 +36,7 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
   BuiltList<MovieFilterByRating> get ratingsOptions;
 
   @nullable
-  MovieFilterByRating get minimum_rating;
+  MovieFilterByRating get minimumRating;
 
   BuiltList<MovieGenre> get genreOptions;
 
@@ -48,12 +48,25 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
   @nullable
   MovieQuality get quality;
 
-  List<dynamic> getQueryOptions() {
+  @nullable
+  BuiltMap<String, MovieFilterByRating> get minRatings;
+
+  List<dynamic> _getQueryOptions() {
     return <dynamic>[
       if (genre != null) genre,
-      if (minimum_rating != null) minimum_rating,
+      if (minimumRating != null) minimumRating,
       if (quality != null) quality,
-      if (sortBy != null) sortBy,
+      if (sortBy != null) sortBy
     ].toList();
+  }
+
+  Map<String, dynamic> getMap() {
+    final Map<String, dynamic> filterOptionsMap = <String, dynamic>{};
+    final List<dynamic> temp = _getQueryOptions();
+    for (dynamic el in temp) {
+      filterOptionsMap[el.filterCategory] = el.toString();
+    }
+
+    return filterOptionsMap;
   }
 }

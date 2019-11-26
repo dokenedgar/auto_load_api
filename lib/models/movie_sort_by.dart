@@ -26,6 +26,8 @@ class MovieSortBy {
     dateAdded,
   ];
 
+  String get filterCategory => 'sort_by';
+
   static Serializer<MovieSortBy> get serializer => _$movieSortBySerializer;
 
   @override

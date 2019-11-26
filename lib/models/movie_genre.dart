@@ -66,6 +66,8 @@ class MovieGenre {
     western
   ];
 
+  String get filterCategory => 'genre';
+
   static Serializer<MovieGenre> get serializer => _$movieGenreSerializer;
 
   @override

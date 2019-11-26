@@ -121,7 +121,7 @@ class _ApiListState extends State<ApiList> {
                   MaterialPageRoute<dynamic>(
                       fullscreenDialog: true, builder: (BuildContext context) => FilterPage()));
               if (result.runtimeType == String) {
-                print(StoreProvider.of<AppState>(context).state.filterOptions.getQueryOptions());
+                print(StoreProvider.of<AppState>(context).state.filterOptions.getMap());
                 //perform query and reset state
               } else {
                 print('$result EMPTY RES');

@@ -20,6 +20,8 @@ class MovieQuality {
     threeDimension,
   ];
 
+  String get filterCategory => 'quality';
+
   static Serializer<MovieQuality> get serializer => _$movieQualitySerializer;
 
   @override

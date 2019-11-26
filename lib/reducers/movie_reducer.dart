@@ -35,8 +35,10 @@ AppState _setQuality(AppState state, SetQuality action) =>
 AppState _setSortBy(AppState state, SetSortBy action) =>
     state.rebuild((AppStateBuilder b) => b.filterOptions.sortBy = action.sortBy);
 
-AppState _setMinRating(AppState state, SetMinRating action) =>
-    state.rebuild((AppStateBuilder b) => b.filterOptions.minimum_rating = action.minRating);
+AppState _setMinRating(AppState state, SetMinRating action) => state.rebuild((AppStateBuilder b) {
+      return b..filterOptions.minimumRating = action.minRating;
+      // return b.filterOptions.minRatings = MapBuilder(action);
+    });
 
 final Reducer<AppState> reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, SetMovies>(_setMovies),

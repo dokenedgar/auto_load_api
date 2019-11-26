@@ -57,3 +57,13 @@ class SetMinRating {
 
   final MovieFilterByRating minRating;
 }
+
+/*
+class SetMinRating {
+  const SetMinRating(this.category, this.minRating);
+
+  final MovieFilterByRating minRating;
+  final String category;
+
+}
+*/
