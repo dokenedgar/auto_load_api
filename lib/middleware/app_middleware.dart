@@ -16,7 +16,7 @@ class AppMiddleware {
   List<Middleware<AppState>> get items {
     return <Middleware<AppState>>[
       TypedMiddleware<AppState, LoadMovies>(loadMovies),
-      TypedMiddleware<AppState, SearchMovieGenre>(searchMovieGenre),
+      TypedMiddleware<AppState, SearchMovies>(searchMovieGenre),
       TypedMiddleware<AppState, FilterMovies>(filterMovies),
     ];
   }
@@ -29,9 +29,9 @@ class AppMiddleware {
   }
 
   Future<void> searchMovieGenre(
-      Store<AppState> store, SearchMovieGenre action, NextDispatcher next) async {
-    final List<Movie> movieList = await ytsApi.getMovies(store.state.pageNumber);
-    store..dispatch(SetMovies(movieList))..dispatch(ChangePageNumber(store.state.pageNumber + 1));
+      Store<AppState> store, SearchMovies action, NextDispatcher next) async {
+    final List<Movie> movieList = await ytsApi.searchMovies(action.queryTerm);
+    store..dispatch(SetSearchedMovies(movieList));
   }
 
   Future<void> filterMovies(Store<AppState> store, FilterMovies action, NextDispatcher next) async {

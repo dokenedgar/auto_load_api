@@ -18,6 +18,14 @@ class YtsMovieApi {
         : List<dynamic>.from(movieData['movies']).map((dynamic it) => Movie.fromJson(it)).toList();
   }
 
+  Future<List<Movie>> searchMovies(String queryTerm) async {
+    final dynamic data = await http.get('/list_movies.json?query_term=$queryTerm');
+    final dynamic movieData = data['data'];
+    return movieData == null
+        ? <Movie>[]
+        : List<dynamic>.from(movieData['movies']).map((dynamic it) => Movie.fromJson(it)).toList();
+  }
+
   Future<List<Movie>> filterMovies(int pageNumber, String queryString) async {
     final dynamic data = await http.get('/list_movies.json?$queryString&page=$pageNumber');
     final dynamic movieData = data['data'];

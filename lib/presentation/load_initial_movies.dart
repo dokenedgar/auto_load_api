@@ -25,6 +25,7 @@ class _ApiListState extends State<ApiList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isLoading = true;
   bool error = false;
+  bool searchedResults = false;
 
   @override
   void initState() {
@@ -38,7 +39,10 @@ class _ApiListState extends State<ApiList> {
     super.didChangeDependencies();
 
     if (StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams().isEmpty) {
-      StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+      print(isLoading);
+      if (isLoading) {
+        StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+      }
     }
   }
 
@@ -54,7 +58,12 @@ class _ApiListState extends State<ApiList> {
           curve: Curves.bounceInOut));
 
       if (StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams().isEmpty) {
-        StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+        if (!searchedResults) {
+          setState(() {
+            isLoading = false;
+          });
+          StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+        }
       } else {
         final String filterParameters =
             StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams();
@@ -98,7 +107,10 @@ class _ApiListState extends State<ApiList> {
               IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () async {
-                  final String result = await showSearch<String>(
+                  setState(() {
+                    isLoading = false;
+                  });
+                  final dynamic result = await showSearch<String>(
                     context: context,
                     delegate: QuerySearchDelegate(
                       store: StoreProvider.of<AppState>(context),
@@ -109,6 +121,9 @@ class _ApiListState extends State<ApiList> {
                   );
 
                   print('result received:  $result');
+                  setState(() {
+                    searchedResults = true;
+                  });
                 },
               )
             ],

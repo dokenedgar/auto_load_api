@@ -15,11 +15,12 @@ import 'package:redux/redux.dart';
 import 'package:rxdart/rxdart.dart';
 
 class QuerySearchDelegate extends SearchDelegate<String> {
-  QuerySearchDelegate({this.store, ActionsDispatcher dispatcher, this.movies, this.scrollController})
+  QuerySearchDelegate(
+      {this.store, ActionsDispatcher dispatcher, this.movies, this.scrollController})
       : streamController = StreamController<String>() {
-    dispatcher.ofType<SetMovies>().listen(_onNewResult);
+    dispatcher.ofType<SetSearchedMovies>().listen(_onNewResult);
     sub = Observable<String>(streamController.stream)
-        .debounceTime(const Duration(seconds: 5))
+        .debounceTime(const Duration(milliseconds: 500))
         .distinct()
         .listen(_onNewQuery);
   }
@@ -30,11 +31,11 @@ class QuerySearchDelegate extends SearchDelegate<String> {
   List<Movie> movies;
   bool isLoading = false;
   StreamSubscription<String> sub;
+  bool showResult = true;
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
-      //CloseButton(),
       if (query.trim().isNotEmpty)
         IconButton(
             icon: const Icon(Icons.close),
@@ -51,18 +52,25 @@ class QuerySearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    //print('buildResults');
-    return InkWell(
-      child: const Text('Result'),
-      onTap: () {
-        close(context, 'results');
-      },
-    );
+    print(isLoading);
+    if (showResult) {
+      return Container(
+        width: double.infinity,
+        child: const CircularProgressIndicator(),
+        alignment: AlignmentDirectional.topCenter,
+        margin: const EdgeInsets.all(16.0),
+      );
+    } else {
+      return GridviewBuilder(
+        scrollController: scrollController,
+        context: context,
+        films: movies,
+      );
+    }
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    //print('buildSuggestions');
     if (query.trim().isNotEmpty) {
       // do the search
       streamController.add(query.trim());
@@ -89,19 +97,18 @@ class QuerySearchDelegate extends SearchDelegate<String> {
     }
   }
 
-  void _onNewResult(SetMovies event) {
-    // clear the loading
-
-    // set the new movies
+  void _onNewResult(SetSearchedMovies event) {
+    // clear the loading and set the new movies
     setState(() {
       isLoading = false;
       movies = event.films;
+      showResult = false;
     });
   }
 
   void _onNewQuery(String query) {
     isLoading = true;
-    store.dispatch(SearchMovieGenre(query));
+    store.dispatch(SearchMovies(query));
   }
 
   @override
