@@ -12,6 +12,7 @@ import 'package:auto_load_api/presentation/movie_search.dart';
 import 'package:auto_load_api/presentation/query_search_delegate.dart';
 import 'package:auto_load_api/presentation/widgets/gridview_builder.dart';
 import 'package:flutter/material.dart' hide showSearch, SearchDelegate;
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
@@ -146,6 +147,8 @@ class _ApiListState extends State<ApiList> {
 
               if (result.runtimeType == String && result.toString().isNotEmpty) {
                 StoreProvider.of<AppState>(context).dispatch(FilterMovies(result));
+                _scrollController.animateTo(_scrollController.position.minScrollExtent,
+                    duration: const Duration(seconds: 1), curve: prefix0.Curves.ease);
               } else {
                 StoreProvider.of<AppState>(context).dispatch(SetFilterOptionsInitState());
               }
