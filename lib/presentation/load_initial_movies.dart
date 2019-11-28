@@ -29,7 +29,7 @@ class _ApiListState extends State<ApiList> {
   @override
   void initState() {
     super.initState();
-    //fetch();
+
     _scrollController.addListener(_onScrollChanged);
   }
 
@@ -38,7 +38,6 @@ class _ApiListState extends State<ApiList> {
     super.didChangeDependencies();
 
     if (StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams().isEmpty) {
-      print('dep change');
       StoreProvider.of<AppState>(context).dispatch(LoadMovies());
     }
   }
@@ -55,12 +54,8 @@ class _ApiListState extends State<ApiList> {
           curve: Curves.bounceInOut));
 
       if (StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams().isEmpty) {
-        //print('dep change');
-        print('Loading Page => ${StoreProvider.of<AppState>(context).state.pageNumber}');
         StoreProvider.of<AppState>(context).dispatch(LoadMovies());
       } else {
-        print(
-            'Loading Page => ${StoreProvider.of<AppState>(context).state.filterOptions.pageNumber}');
         final String filterParameters =
             StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams();
         StoreProvider.of<AppState>(context).dispatch(FilterMovies(filterParameters));
@@ -98,7 +93,6 @@ class _ApiListState extends State<ApiList> {
                       error = false;
                       isLoading = true;
                     });
-                    //fetch();
                   },
                 ),
               IconButton(
@@ -136,14 +130,9 @@ class _ApiListState extends State<ApiList> {
                       fullscreenDialog: true, builder: (BuildContext context) => FilterPage()));
 
               if (result.runtimeType == String && result.toString().isNotEmpty) {
-                //print(StoreProvider.of<AppState>(context).state.filterOptions.getMap());
-                //perform query and reset state
                 StoreProvider.of<AppState>(context).dispatch(FilterMovies(result));
               } else {
-                print('$result EMPTY RES');
-                print(StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams());
                 StoreProvider.of<AppState>(context).dispatch(SetFilterOptionsInitState());
-                print(StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams());
               }
             },
             label: Icon(Icons.filter_vintage),

@@ -63,17 +63,15 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
     ].toList();
   }
 
-  //Map<String, dynamic> getMap() {
   String getFilterParams() {
     final Map<String, dynamic> filterOptionsMap = <String, dynamic>{};
     final List<dynamic> temp = _getQueryOptions();
     for (dynamic el in temp) {
       filterOptionsMap[el.filterCategory] = el.toString();
     }
-    //query.keys.map((key) => '$key=${query[key]}').join('&');
-    String q = filterOptionsMap.keys.map((String key) => '$key=${filterOptionsMap[key]}').join('&');
-    //print(q);
+    final String query =
+        filterOptionsMap.keys.map((String key) => '$key=${filterOptionsMap[key]}').join('&');
 
-    return q;
+    return query;
   }
 }

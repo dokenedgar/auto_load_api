@@ -65,17 +65,17 @@ class FilterPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 filterCategory('Genre'),
-                Divider(),
+                const Divider(),
                 FilterChipWidget(genre, 'genre'),
-                Divider(),
+                const Divider(),
                 filterCategory('Quality'),
-                Divider(),
+                const Divider(),
                 FilterChipWidget(quality, 'quality'),
-                Divider(),
+                const Divider(),
                 filterCategory('Minimum Rating'),
-                Divider(),
+                const Divider(),
                 FilterChipWidget(minimumRating, 'minimumRating'),
-                Divider(),
+                const Divider(),
                 filterCategory('Sort By'),
                 FilterChipWidget(sortBy, 'sortBy'),
               ],
@@ -125,7 +125,6 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
                 selected: widget.filterCategory.indexOf(item) == _value,
                 onSelected: (bool isSelected) {
                   if (selectedItem == item) {
-                    print('double click');
                     setState(() {
                       selectedItem = '';
                       _value = -1;
@@ -147,7 +146,6 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
 
   void updateFilter(
       BuildContext context, String filterCategory, dynamic filterValue, bool removeSelection) {
-    print(filterValue.runtimeType);
     switch (filterCategory) {
       case 'genre':
         if (removeSelection) {
