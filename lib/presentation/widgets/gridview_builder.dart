@@ -80,13 +80,17 @@ class GridviewBuilder extends StatelessWidget {
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         Wrap(
                           alignment: WrapAlignment.center,
                           children: List<Widget>.generate(
                             film.genres.length,
                             (int i) {
-                              return Text('${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}');
+                              return Text(
+                                '${film.genres[i]}${i == film.genres.length - 1 ? '' : ', '}',
+                              );
                             },
                           ),
                         ),

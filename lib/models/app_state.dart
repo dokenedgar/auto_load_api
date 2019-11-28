@@ -22,8 +22,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
         ..films = ListBuilder<Movie>()
         ..selectedMovie = null
         ..pageNumber = 1
-        ..genre = 'all'
-        ..quality = 'all'
+        //..genre = 'all'
+        //..quality = 'all'
         ..filterOptions = FilterOptions.initialState().toBuilder();
     });
   }
@@ -35,9 +35,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   int get pageNumber;
 
-  String get genre;
+  //String get genre;
 
-  String get quality;
+  //String get quality;
 
   FilterOptions get filterOptions;
 }

@@ -14,7 +14,19 @@ class _$FilterOptions extends FilterOptions {
   @override
   final BuiltList<MovieFilterByRating> ratingsOptions;
   @override
-  final MovieFilterByRating minimum_rating;
+  final MovieFilterByRating minimumRating;
+  @override
+  final BuiltList<MovieGenre> genreOptions;
+  @override
+  final MovieGenre genre;
+  @override
+  final BuiltList<MovieQuality> qualityOptions;
+  @override
+  final MovieQuality quality;
+  @override
+  final BuiltMap<String, MovieFilterByRating> minRatings;
+  @override
+  final int pageNumber;
 
   factory _$FilterOptions([void Function(FilterOptionsBuilder) updates]) =>
       (new FilterOptionsBuilder()..update(updates)).build();
@@ -23,13 +35,28 @@ class _$FilterOptions extends FilterOptions {
       {this.sortByOptions,
       this.sortBy,
       this.ratingsOptions,
-      this.minimum_rating})
+      this.minimumRating,
+      this.genreOptions,
+      this.genre,
+      this.qualityOptions,
+      this.quality,
+      this.minRatings,
+      this.pageNumber})
       : super._() {
     if (sortByOptions == null) {
       throw new BuiltValueNullFieldError('FilterOptions', 'sortByOptions');
     }
     if (ratingsOptions == null) {
       throw new BuiltValueNullFieldError('FilterOptions', 'ratingsOptions');
+    }
+    if (genreOptions == null) {
+      throw new BuiltValueNullFieldError('FilterOptions', 'genreOptions');
+    }
+    if (qualityOptions == null) {
+      throw new BuiltValueNullFieldError('FilterOptions', 'qualityOptions');
+    }
+    if (pageNumber == null) {
+      throw new BuiltValueNullFieldError('FilterOptions', 'pageNumber');
     }
   }
 
@@ -47,15 +74,35 @@ class _$FilterOptions extends FilterOptions {
         sortByOptions == other.sortByOptions &&
         sortBy == other.sortBy &&
         ratingsOptions == other.ratingsOptions &&
-        minimum_rating == other.minimum_rating;
+        minimumRating == other.minimumRating &&
+        genreOptions == other.genreOptions &&
+        genre == other.genre &&
+        qualityOptions == other.qualityOptions &&
+        quality == other.quality &&
+        minRatings == other.minRatings &&
+        pageNumber == other.pageNumber;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, sortByOptions.hashCode), sortBy.hashCode),
-            ratingsOptions.hashCode),
-        minimum_rating.hashCode));
+        $jc(
+            $jc(
+                $jc(
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc($jc(0, sortByOptions.hashCode),
+                                        sortBy.hashCode),
+                                    ratingsOptions.hashCode),
+                                minimumRating.hashCode),
+                            genreOptions.hashCode),
+                        genre.hashCode),
+                    qualityOptions.hashCode),
+                quality.hashCode),
+            minRatings.hashCode),
+        pageNumber.hashCode));
   }
 
   @override
@@ -64,7 +111,13 @@ class _$FilterOptions extends FilterOptions {
           ..add('sortByOptions', sortByOptions)
           ..add('sortBy', sortBy)
           ..add('ratingsOptions', ratingsOptions)
-          ..add('minimum_rating', minimum_rating))
+          ..add('minimumRating', minimumRating)
+          ..add('genreOptions', genreOptions)
+          ..add('genre', genre)
+          ..add('qualityOptions', qualityOptions)
+          ..add('quality', quality)
+          ..add('minRatings', minRatings)
+          ..add('pageNumber', pageNumber))
         .toString();
   }
 }
@@ -89,10 +142,40 @@ class FilterOptionsBuilder
   set ratingsOptions(ListBuilder<MovieFilterByRating> ratingsOptions) =>
       _$this._ratingsOptions = ratingsOptions;
 
-  MovieFilterByRating _minimum_rating;
-  MovieFilterByRating get minimum_rating => _$this._minimum_rating;
-  set minimum_rating(MovieFilterByRating minimum_rating) =>
-      _$this._minimum_rating = minimum_rating;
+  MovieFilterByRating _minimumRating;
+  MovieFilterByRating get minimumRating => _$this._minimumRating;
+  set minimumRating(MovieFilterByRating minimumRating) =>
+      _$this._minimumRating = minimumRating;
+
+  ListBuilder<MovieGenre> _genreOptions;
+  ListBuilder<MovieGenre> get genreOptions =>
+      _$this._genreOptions ??= new ListBuilder<MovieGenre>();
+  set genreOptions(ListBuilder<MovieGenre> genreOptions) =>
+      _$this._genreOptions = genreOptions;
+
+  MovieGenre _genre;
+  MovieGenre get genre => _$this._genre;
+  set genre(MovieGenre genre) => _$this._genre = genre;
+
+  ListBuilder<MovieQuality> _qualityOptions;
+  ListBuilder<MovieQuality> get qualityOptions =>
+      _$this._qualityOptions ??= new ListBuilder<MovieQuality>();
+  set qualityOptions(ListBuilder<MovieQuality> qualityOptions) =>
+      _$this._qualityOptions = qualityOptions;
+
+  MovieQuality _quality;
+  MovieQuality get quality => _$this._quality;
+  set quality(MovieQuality quality) => _$this._quality = quality;
+
+  MapBuilder<String, MovieFilterByRating> _minRatings;
+  MapBuilder<String, MovieFilterByRating> get minRatings =>
+      _$this._minRatings ??= new MapBuilder<String, MovieFilterByRating>();
+  set minRatings(MapBuilder<String, MovieFilterByRating> minRatings) =>
+      _$this._minRatings = minRatings;
+
+  int _pageNumber;
+  int get pageNumber => _$this._pageNumber;
+  set pageNumber(int pageNumber) => _$this._pageNumber = pageNumber;
 
   FilterOptionsBuilder();
 
@@ -101,7 +184,13 @@ class FilterOptionsBuilder
       _sortByOptions = _$v.sortByOptions?.toBuilder();
       _sortBy = _$v.sortBy;
       _ratingsOptions = _$v.ratingsOptions?.toBuilder();
-      _minimum_rating = _$v.minimum_rating;
+      _minimumRating = _$v.minimumRating;
+      _genreOptions = _$v.genreOptions?.toBuilder();
+      _genre = _$v.genre;
+      _qualityOptions = _$v.qualityOptions?.toBuilder();
+      _quality = _$v.quality;
+      _minRatings = _$v.minRatings?.toBuilder();
+      _pageNumber = _$v.pageNumber;
       _$v = null;
     }
     return this;
@@ -129,7 +218,13 @@ class FilterOptionsBuilder
               sortByOptions: sortByOptions.build(),
               sortBy: sortBy,
               ratingsOptions: ratingsOptions.build(),
-              minimum_rating: minimum_rating);
+              minimumRating: minimumRating,
+              genreOptions: genreOptions.build(),
+              genre: genre,
+              qualityOptions: qualityOptions.build(),
+              quality: quality,
+              minRatings: _minRatings?.build(),
+              pageNumber: pageNumber);
     } catch (_) {
       String _$failedField;
       try {
@@ -138,6 +233,15 @@ class FilterOptionsBuilder
 
         _$failedField = 'ratingsOptions';
         ratingsOptions.build();
+
+        _$failedField = 'genreOptions';
+        genreOptions.build();
+
+        _$failedField = 'qualityOptions';
+        qualityOptions.build();
+
+        _$failedField = 'minRatings';
+        _minRatings?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'FilterOptions', _$failedField, e.toString());

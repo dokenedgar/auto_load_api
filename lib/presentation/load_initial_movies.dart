@@ -29,14 +29,17 @@ class _ApiListState extends State<ApiList> {
   @override
   void initState() {
     super.initState();
-    //fetch();
+
     _scrollController.addListener(_onScrollChanged);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+
+    if (StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams().isEmpty) {
+      StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+    }
   }
 
   void _onScrollChanged() {
@@ -49,8 +52,14 @@ class _ApiListState extends State<ApiList> {
           _scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 300),
           curve: Curves.bounceInOut));
-      print('Loading Page => ${StoreProvider.of<AppState>(context).state.pageNumber}');
-      StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+
+      if (StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams().isEmpty) {
+        StoreProvider.of<AppState>(context).dispatch(LoadMovies());
+      } else {
+        final String filterParameters =
+            StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams();
+        StoreProvider.of<AppState>(context).dispatch(FilterMovies(filterParameters));
+      }
     }
   }
 
@@ -84,7 +93,6 @@ class _ApiListState extends State<ApiList> {
                       error = false;
                       isLoading = true;
                     });
-                    //fetch();
                   },
                 ),
               IconButton(
@@ -120,11 +128,11 @@ class _ApiListState extends State<ApiList> {
                   context,
                   MaterialPageRoute<dynamic>(
                       fullscreenDialog: true, builder: (BuildContext context) => FilterPage()));
-              if (result.runtimeType == String) {
-                print(StoreProvider.of<AppState>(context).state.filterOptions);
-                //perform query and reset state
+
+              if (result.runtimeType == String && result.toString().isNotEmpty) {
+                StoreProvider.of<AppState>(context).dispatch(FilterMovies(result));
               } else {
-                print('$result EMPTY RES');
+                StoreProvider.of<AppState>(context).dispatch(SetFilterOptionsInitState());
               }
             },
             label: Icon(Icons.filter_vintage),

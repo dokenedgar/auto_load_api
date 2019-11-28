@@ -5,6 +5,8 @@
 library movie_filtering;
 
 import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
+import 'package:auto_load_api/models/movie_genre.dart';
+import 'package:auto_load_api/models/movie_quality.dart';
 import 'package:auto_load_api/models/movie_sort_by.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -20,8 +22,10 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
     return _$FilterOptions((FilterOptionsBuilder b) {
       b
         ..sortByOptions = ListBuilder<MovieSortBy>(MovieSortBy.values)
-        ..ratingsOptions = ListBuilder<MovieFilterByRating>(MovieFilterByRating.values);
-      print(b.sortBy);
+        ..ratingsOptions = ListBuilder<MovieFilterByRating>(MovieFilterByRating.values)
+        ..genreOptions = ListBuilder<MovieGenre>(MovieGenre.values)
+        ..qualityOptions = ListBuilder<MovieQuality>(MovieQuality.values)
+        ..pageNumber = 1;
     });
   }
 
@@ -33,5 +37,41 @@ abstract class FilterOptions implements Built<FilterOptions, FilterOptionsBuilde
   BuiltList<MovieFilterByRating> get ratingsOptions;
 
   @nullable
-  MovieFilterByRating get minimum_rating;
+  MovieFilterByRating get minimumRating;
+
+  BuiltList<MovieGenre> get genreOptions;
+
+  @nullable
+  MovieGenre get genre;
+
+  BuiltList<MovieQuality> get qualityOptions;
+
+  @nullable
+  MovieQuality get quality;
+
+  @nullable
+  BuiltMap<String, MovieFilterByRating> get minRatings;
+
+  int get pageNumber;
+
+  List<dynamic> _getQueryOptions() {
+    return <dynamic>[
+      if (genre != null) genre,
+      if (minimumRating != null) minimumRating,
+      if (quality != null) quality,
+      if (sortBy != null) sortBy
+    ].toList();
+  }
+
+  String getFilterParams() {
+    final Map<String, dynamic> filterOptionsMap = <String, dynamic>{};
+    final List<dynamic> temp = _getQueryOptions();
+    for (dynamic el in temp) {
+      filterOptionsMap[el.filterCategory] = el.toString();
+    }
+    final String query =
+        filterOptionsMap.keys.map((String key) => '$key=${filterOptionsMap[key]}').join('&');
+
+    return query;
+  }
 }

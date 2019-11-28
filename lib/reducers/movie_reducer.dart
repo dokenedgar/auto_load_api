@@ -4,6 +4,7 @@
 
 import 'package:auto_load_api/actions/movies_action.dart';
 import 'package:auto_load_api/models/app_state.dart';
+import 'package:auto_load_api/models/movie_filtering.dart';
 import 'package:redux/redux.dart';
 
 AppState _setMovies(AppState state, SetMovies action) {
@@ -25,18 +26,51 @@ AppState _changePageNumber(AppState state, ChangePageNumber action) {
 }
 
 AppState _setGenre(AppState state, SetGenre action) {
-  return state.rebuild((AppStateBuilder b) => b.genre = action.genre);
+  return state.rebuild((AppStateBuilder b) => b.filterOptions.genre = action.genre);
 }
 
 AppState _setQuality(AppState state, SetQuality action) =>
-    state.rebuild((AppStateBuilder b) => b.quality = action.quality);
+    state.rebuild((AppStateBuilder b) => b.filterOptions.quality = action.quality);
 
-//AppState _setSortBy(AppState state, SetSortBy action) => state.rebuild((AppStateBuilder b) => b.sortBy = action.sortBy);
 AppState _setSortBy(AppState state, SetSortBy action) =>
     state.rebuild((AppStateBuilder b) => b.filterOptions.sortBy = action.sortBy);
 
-AppState _setMinRating(AppState state, SetMinRating action) =>
-    state.rebuild((AppStateBuilder b) => b.filterOptions.minimum_rating = action.minRating);
+AppState _setMinRating(AppState state, SetMinRating action) => state.rebuild((AppStateBuilder b) {
+      return b..filterOptions.minimumRating = action.minRating;
+    });
+
+AppState _setFilterMovies(AppState state, SetFilterMovies action) {
+  return state.rebuild((AppStateBuilder b) {
+    if (b.filterOptions.pageNumber > 1) {
+      b.films.addAll(action.films);
+    } else {
+      b.films.replace(action.films);
+    }
+  });
+}
+
+AppState _setFilterPageNumber(AppState state, ChangeFilterPageNumber action) =>
+    state.rebuild((AppStateBuilder b) => b.filterOptions.pageNumber = action.pageNumber);
+
+AppState _reInitializeFilterOptions(AppState state, SetFilterOptionsInitState action) => state
+    .rebuild((AppStateBuilder b) => b.filterOptions = FilterOptions.initialState().toBuilder());
+
+AppState _removeGenre(AppState state, RemoveGenre action) => state.rebuild((AppStateBuilder b) {
+      return b..filterOptions.genre = null;
+    });
+
+AppState _removeQuality(AppState state, RemoveQuality action) => state.rebuild((AppStateBuilder b) {
+      return b..filterOptions.quality = null;
+    });
+
+AppState _removeSortBy(AppState state, RemoveSortBy action) => state.rebuild((AppStateBuilder b) {
+      return b..filterOptions.sortBy = null;
+    });
+
+AppState _removeMinRating(AppState state, RemoveMinRating action) =>
+    state.rebuild((AppStateBuilder b) {
+      return b..filterOptions.minimumRating = null;
+    });
 
 final Reducer<AppState> reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, SetMovies>(_setMovies),
@@ -46,4 +80,11 @@ final Reducer<AppState> reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, SetQuality>(_setQuality),
   TypedReducer<AppState, SetSortBy>(_setSortBy),
   TypedReducer<AppState, SetMinRating>(_setMinRating),
+  TypedReducer<AppState, SetFilterMovies>(_setFilterMovies),
+  TypedReducer<AppState, ChangeFilterPageNumber>(_setFilterPageNumber),
+  TypedReducer<AppState, SetFilterOptionsInitState>(_reInitializeFilterOptions),
+  TypedReducer<AppState, RemoveGenre>(_removeGenre),
+  TypedReducer<AppState, RemoveQuality>(_removeQuality),
+  TypedReducer<AppState, RemoveSortBy>(_removeSortBy),
+  TypedReducer<AppState, RemoveMinRating>(_removeMinRating),
 ]);

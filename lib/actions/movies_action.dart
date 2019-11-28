@@ -4,6 +4,8 @@
 
 import 'package:auto_load_api/models/movie.dart';
 import 'package:auto_load_api/models/movie_filter_by_ratings.dart';
+import 'package:auto_load_api/models/movie_genre.dart';
+import 'package:auto_load_api/models/movie_quality.dart';
 import 'package:auto_load_api/models/movie_sort_by.dart';
 
 class SetMovies {
@@ -35,13 +37,13 @@ class SearchMovieGenre {
 class SetGenre {
   const SetGenre(this.genre);
 
-  final String genre;
+  final MovieGenre genre;
 }
 
 class SetQuality {
   const SetQuality(this.quality);
 
-  final String quality;
+  final MovieQuality quality;
 }
 
 class SetSortBy {
@@ -55,3 +57,31 @@ class SetMinRating {
 
   final MovieFilterByRating minRating;
 }
+
+class FilterMovies {
+  const FilterMovies(this.filterParameters);
+
+  final String filterParameters;
+}
+
+class SetFilterMovies {
+  const SetFilterMovies(this.films);
+
+  final List<Movie> films;
+}
+
+class ChangeFilterPageNumber {
+  const ChangeFilterPageNumber(this.pageNumber);
+
+  final int pageNumber;
+}
+
+class SetFilterOptionsInitState {}
+
+class RemoveGenre {}
+
+class RemoveQuality {}
+
+class RemoveSortBy {}
+
+class RemoveMinRating {}
