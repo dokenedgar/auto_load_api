@@ -52,7 +52,6 @@ class QuerySearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    print(isLoading);
     if (showResult) {
       return Container(
         width: double.infinity,
