@@ -25,6 +25,8 @@ class _$FilterOptions extends FilterOptions {
   final MovieQuality quality;
   @override
   final BuiltMap<String, MovieFilterByRating> minRatings;
+  @override
+  final int pageNumber;
 
   factory _$FilterOptions([void Function(FilterOptionsBuilder) updates]) =>
       (new FilterOptionsBuilder()..update(updates)).build();
@@ -38,7 +40,8 @@ class _$FilterOptions extends FilterOptions {
       this.genre,
       this.qualityOptions,
       this.quality,
-      this.minRatings})
+      this.minRatings,
+      this.pageNumber})
       : super._() {
     if (sortByOptions == null) {
       throw new BuiltValueNullFieldError('FilterOptions', 'sortByOptions');
@@ -51,6 +54,9 @@ class _$FilterOptions extends FilterOptions {
     }
     if (qualityOptions == null) {
       throw new BuiltValueNullFieldError('FilterOptions', 'qualityOptions');
+    }
+    if (pageNumber == null) {
+      throw new BuiltValueNullFieldError('FilterOptions', 'pageNumber');
     }
   }
 
@@ -73,7 +79,8 @@ class _$FilterOptions extends FilterOptions {
         genre == other.genre &&
         qualityOptions == other.qualityOptions &&
         quality == other.quality &&
-        minRatings == other.minRatings;
+        minRatings == other.minRatings &&
+        pageNumber == other.pageNumber;
   }
 
   @override
@@ -85,15 +92,17 @@ class _$FilterOptions extends FilterOptions {
                     $jc(
                         $jc(
                             $jc(
-                                $jc($jc(0, sortByOptions.hashCode),
-                                    sortBy.hashCode),
-                                ratingsOptions.hashCode),
-                            minimumRating.hashCode),
-                        genreOptions.hashCode),
-                    genre.hashCode),
-                qualityOptions.hashCode),
-            quality.hashCode),
-        minRatings.hashCode));
+                                $jc(
+                                    $jc($jc(0, sortByOptions.hashCode),
+                                        sortBy.hashCode),
+                                    ratingsOptions.hashCode),
+                                minimumRating.hashCode),
+                            genreOptions.hashCode),
+                        genre.hashCode),
+                    qualityOptions.hashCode),
+                quality.hashCode),
+            minRatings.hashCode),
+        pageNumber.hashCode));
   }
 
   @override
@@ -107,7 +116,8 @@ class _$FilterOptions extends FilterOptions {
           ..add('genre', genre)
           ..add('qualityOptions', qualityOptions)
           ..add('quality', quality)
-          ..add('minRatings', minRatings))
+          ..add('minRatings', minRatings)
+          ..add('pageNumber', pageNumber))
         .toString();
   }
 }
@@ -163,6 +173,10 @@ class FilterOptionsBuilder
   set minRatings(MapBuilder<String, MovieFilterByRating> minRatings) =>
       _$this._minRatings = minRatings;
 
+  int _pageNumber;
+  int get pageNumber => _$this._pageNumber;
+  set pageNumber(int pageNumber) => _$this._pageNumber = pageNumber;
+
   FilterOptionsBuilder();
 
   FilterOptionsBuilder get _$this {
@@ -176,6 +190,7 @@ class FilterOptionsBuilder
       _qualityOptions = _$v.qualityOptions?.toBuilder();
       _quality = _$v.quality;
       _minRatings = _$v.minRatings?.toBuilder();
+      _pageNumber = _$v.pageNumber;
       _$v = null;
     }
     return this;
@@ -208,7 +223,8 @@ class FilterOptionsBuilder
               genre: genre,
               qualityOptions: qualityOptions.build(),
               quality: quality,
-              minRatings: _minRatings?.build());
+              minRatings: _minRatings?.build(),
+              pageNumber: pageNumber);
     } catch (_) {
       String _$failedField;
       try {

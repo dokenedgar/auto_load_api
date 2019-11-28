@@ -58,12 +58,30 @@ class SetMinRating {
   final MovieFilterByRating minRating;
 }
 
-/*
-class SetMinRating {
-  const SetMinRating(this.category, this.minRating);
+class FilterMovies {
+  const FilterMovies(this.filterParameters);
 
-  final MovieFilterByRating minRating;
-  final String category;
-
+  final String filterParameters;
 }
-*/
+
+class SetFilterMovies {
+  const SetFilterMovies(this.films);
+
+  final List<Movie> films;
+}
+
+class ChangeFilterPageNumber {
+  const ChangeFilterPageNumber(this.pageNumber);
+
+  final int pageNumber;
+}
+
+class SetFilterOptionsInitState {}
+
+class RemoveGenre {}
+
+class RemoveQuality {}
+
+class RemoveSortBy {}
+
+class RemoveMinRating {}

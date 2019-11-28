@@ -16,6 +16,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 class FilterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    StoreProvider.of<AppState>(context).dispatch(SetFilterOptionsInitState());
     final List<MovieGenre> genre =
         StoreProvider.of<AppState>(context).state.filterOptions.genreOptions.toList();
     final List<MovieFilterByRating> minimumRating =
@@ -49,7 +50,8 @@ class FilterPage extends StatelessWidget {
                 onTap: () {
                   //print('save');
                   // method that saves selections to Store
-                  Navigator.pop(context, 'Apply Clicked');
+                  Navigator.pop(context,
+                      StoreProvider.of<AppState>(context).state.filterOptions.getFilterParams());
                 },
               ),
             ),
@@ -105,6 +107,7 @@ class FilterChipWidget extends StatefulWidget {
 class _FilterChipWidgetState extends State<FilterChipWidget> {
   int _value = -1;
   dynamic selectedItem = '';
+  bool removeSelectedOption = false;
 
   @override
   Widget build(BuildContext context) {
@@ -121,53 +124,78 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
                 selectedColor: const Color.fromRGBO(195, 55, 100, 1.0),
                 selected: widget.filterCategory.indexOf(item) == _value,
                 onSelected: (bool isSelected) {
-                  setState(() {
-                    selectedItem = item;
-                    _value = widget.filterCategory.indexOf(item);
-                  });
-                  updateFilter(context, widget.categoryName, item);
+                  if (selectedItem == item) {
+                    print('double click');
+                    setState(() {
+                      selectedItem = '';
+                      _value = -1;
+                      removeSelectedOption = true;
+                    });
+                  } else {
+                    setState(() {
+                      selectedItem = item;
+                      _value = widget.filterCategory.indexOf(item);
+                      removeSelectedOption = false;
+                    });
+                  }
+                  updateFilter(context, widget.categoryName, item, removeSelectedOption);
                 },
               ))
           .toList(),
     );
   }
 
-  void updateFilter(BuildContext context, String filterCategory, dynamic filterValue) {
+  void updateFilter(
+      BuildContext context, String filterCategory, dynamic filterValue, bool removeSelection) {
     print(filterValue.runtimeType);
     switch (filterCategory) {
       case 'genre':
-        final MovieGenre selectedGenre = StoreProvider.of<AppState>(context)
-            .state
-            .filterOptions
-            .genreOptions
-            .firstWhere((MovieGenre element) => element.toString() == filterValue.toString());
-        StoreProvider.of<AppState>(context).dispatch(SetGenre(selectedGenre));
+        if (removeSelection) {
+          StoreProvider.of<AppState>(context).dispatch(RemoveGenre());
+        } else {
+          final MovieGenre selectedGenre = StoreProvider.of<AppState>(context)
+              .state
+              .filterOptions
+              .genreOptions
+              .firstWhere((MovieGenre element) => element.toString() == filterValue.toString());
+          StoreProvider.of<AppState>(context).dispatch(SetGenre(selectedGenre));
+        }
         break;
       case 'quality':
-        final MovieQuality selectedQuality = StoreProvider.of<AppState>(context)
-            .state
-            .filterOptions
-            .qualityOptions
-            .firstWhere((MovieQuality element) => element.toString() == filterValue.toString());
-        StoreProvider.of<AppState>(context).dispatch(SetQuality(selectedQuality));
+        if (removeSelection) {
+          StoreProvider.of<AppState>(context).dispatch(RemoveQuality());
+        } else {
+          final MovieQuality selectedQuality = StoreProvider.of<AppState>(context)
+              .state
+              .filterOptions
+              .qualityOptions
+              .firstWhere((MovieQuality element) => element.toString() == filterValue.toString());
+          StoreProvider.of<AppState>(context).dispatch(SetQuality(selectedQuality));
+        }
         break;
       case 'sortBy':
-        final MovieSortBy selectedOption = StoreProvider.of<AppState>(context)
-            .state
-            .filterOptions
-            .sortByOptions
-            .firstWhere((MovieSortBy el) => el.toString() == filterValue.toString());
-        StoreProvider.of<AppState>(context).dispatch(SetSortBy(selectedOption));
+        if (removeSelection) {
+          StoreProvider.of<AppState>(context).dispatch(RemoveSortBy());
+        } else {
+          final MovieSortBy selectedOption = StoreProvider.of<AppState>(context)
+              .state
+              .filterOptions
+              .sortByOptions
+              .firstWhere((MovieSortBy el) => el.toString() == filterValue.toString());
+          StoreProvider.of<AppState>(context).dispatch(SetSortBy(selectedOption));
+        }
         break;
       case 'minimumRating':
-        final MovieFilterByRating selectedRating = StoreProvider.of<AppState>(context)
-            .state
-            .filterOptions
-            .ratingsOptions
-            .firstWhere((MovieFilterByRating el) => el.getValue() == filterValue.getValue());
-        StoreProvider.of<AppState>(context).dispatch(SetMinRating(selectedRating));
-        //StoreProvider.of<AppState>(context)
-        //   .dispatch(SetMinRating('minimum_rating', selectedRating));
+        if (removeSelection) {
+          StoreProvider.of<AppState>(context).dispatch(RemoveMinRating());
+        } else {
+          final MovieFilterByRating selectedRating = StoreProvider.of<AppState>(context)
+              .state
+              .filterOptions
+              .ratingsOptions
+              .firstWhere((MovieFilterByRating el) => el.getValue() == filterValue.getValue());
+          StoreProvider.of<AppState>(context).dispatch(SetMinRating(selectedRating));
+        }
         break;
     }
   }
