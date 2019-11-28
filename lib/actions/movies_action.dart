@@ -28,10 +28,16 @@ class ChangePageNumber {
 
 class LoadMovies {}
 
-class SearchMovieGenre {
-  const SearchMovieGenre(this.genre);
+class SearchMovies {
+  const SearchMovies(this.queryTerm);
 
-  final String genre;
+  final String queryTerm;
+}
+
+class SetSearchedMovies {
+  const SetSearchedMovies(this.films);
+
+  final List<Movie> films;
 }
 
 class SetGenre {

@@ -72,6 +72,12 @@ AppState _removeMinRating(AppState state, RemoveMinRating action) =>
       return b..filterOptions.minimumRating = null;
     });
 
+AppState _setSearchedMovies(AppState state, SetSearchedMovies action) {
+  return state.rebuild((AppStateBuilder b) {
+    b.films.replace(action.films);
+  });
+}
+
 final Reducer<AppState> reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, SetMovies>(_setMovies),
   TypedReducer<AppState, SelectedMovie>(_setSelectedMovie),
@@ -87,4 +93,5 @@ final Reducer<AppState> reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, RemoveQuality>(_removeQuality),
   TypedReducer<AppState, RemoveSortBy>(_removeSortBy),
   TypedReducer<AppState, RemoveMinRating>(_removeMinRating),
+  TypedReducer<AppState, SetSearchedMovies>(_setSearchedMovies),
 ]);
