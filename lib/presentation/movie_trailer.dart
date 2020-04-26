@@ -28,9 +28,9 @@ class _MovieTrailerState extends State<MovieTrailer> {
       autoPlay: true,
       fullScreen: true,
     );
-    FlutterYoutube().onVideoEnded.listen((dynamic onData) {
-      Navigator.pop(context);
-    });
+   // FlutterYoutube().onVideoEnded.listen((dynamic onData) {
+     // Navigator.pop(context);
+    //});
   }
 
   @override

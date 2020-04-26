@@ -181,7 +181,7 @@ class _ApiListState extends State<ApiList> {
                   setState(() {
                     isLoading = false;
                   });
-                  if(networkConnectivity) {
+                  if(await Connectivity().checkConnectivity() != ConnectivityResult.none) {
                     final dynamic result = await showSearch<String>(
                       context: context,
                       delegate: QuerySearchDelegate(
@@ -220,7 +220,8 @@ class _ApiListState extends State<ApiList> {
                     builder: (BuildContext context) => FilterPage(),
                   ));
 
-              if(networkConnectivity){
+              final dynamic connResult = await Connectivity().checkConnectivity();
+              if(connResult != ConnectivityResult.none){
                 if (result.runtimeType == String && result.toString().isNotEmpty) {
                   StoreProvider.of<AppState>(context).dispatch(FilterMovies(result));
                   _scrollController.animateTo(_scrollController.position.minScrollExtent,
