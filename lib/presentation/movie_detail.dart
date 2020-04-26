@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_youtube/flutter_youtube.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class MovieDetail extends StatelessWidget {
   const MovieDetail({Key key}) : super(key: key);
@@ -87,7 +88,10 @@ class MovieDetail extends StatelessWidget {
     return MovieContainer(
       builder: (BuildContext context, Movie movie) {
         return Scaffold(
-            appBar: AppBar(
+            appBar: GradientAppBar(
+              //celestial
+              backgroundColorStart: const Color.fromRGBO(195, 55, 100, 1.0),
+              backgroundColorEnd: const Color.fromRGBO(29, 38, 113, 1.0),
               title: Text(movie.title),
             ),
             body: SingleChildScrollView(
