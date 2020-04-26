@@ -19,6 +19,7 @@ dependencies:
   flutter_redux: ^0.5.3
   rxdart: any
   gradient_app_bar: ^0.0.1
+  connectivity: ^0.4.8+2
 
 dev_dependencies:
   flutter_test:

@@ -70,7 +70,8 @@ class ActionsDispatcher extends InheritedWidget {
         super(key: key, child: child);
 
   static ActionsDispatcher of(BuildContext context) {
-    final ActionsDispatcher dispatcher = context.inheritFromWidgetOfExactType(ActionsDispatcher);
+  //  final ActionsDispatcher dispatcher = context.inheritFromWidgetOfExactType(ActionsDispatcher);
+    final ActionsDispatcher dispatcher = context.dependOnInheritedWidgetOfExactType();
     return dispatcher;
   }
 
