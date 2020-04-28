@@ -21,6 +21,7 @@ dependencies:
   gradient_app_bar: ^0.0.1
   connectivity: ^0.4.8+2
   flutter_launcher_icons: ^0.7.5
+  flutter_launcher_name: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +36,9 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icon.png"
+
+flutter_launcher_name:
+  name: "Movie Trailers And Torrents"
 
 flutter:
   uses-material-design: true
