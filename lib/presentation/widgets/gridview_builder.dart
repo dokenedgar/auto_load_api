@@ -76,7 +76,7 @@ class GridviewBuilder extends StatelessWidget {
                         Text(
                           film.title,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                           ),

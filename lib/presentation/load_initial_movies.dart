@@ -164,7 +164,7 @@ class _ApiListState extends State<ApiList> {
             actions: <Widget>[
               if (error)
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.error_outline,
                     color: Colors.red,
                   ),
@@ -176,7 +176,7 @@ class _ApiListState extends State<ApiList> {
                   },
                 ),
               IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () async {
                   setState(() {
                     isLoading = false;
@@ -235,7 +235,7 @@ class _ApiListState extends State<ApiList> {
               }
 
             },
-            label: Icon(Icons.filter_vintage),
+            label: const Icon(Icons.filter_vintage),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         );

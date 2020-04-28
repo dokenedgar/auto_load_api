@@ -118,7 +118,7 @@ class MovieDetail extends StatelessWidget {
                                     backgroundColor: Theme.of(context).primaryColor,
                                     label: Text(
                                       genre,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                       ),
                                     ),
@@ -126,7 +126,7 @@ class MovieDetail extends StatelessWidget {
                               .toList(),
                         ),
                         Text('Language: ${movie.language}'),
-                        Divider(
+                        const Divider(
                           color: Colors.black,
                         ),
                         Container(
@@ -135,18 +135,18 @@ class MovieDetail extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text('Year: ${movie.year}'),
-                              VerticalDivider(
+                              const VerticalDivider(
                                 color: Colors.black,
                               ),
                               Text('Running Time: ${movie.runtime} mins'),
-                              VerticalDivider(
+                              const VerticalDivider(
                                 color: Colors.black,
                               ),
                               Text('${movie.rating}/10'),
                             ],
                           ),
                         ),
-                        Divider(
+                        const Divider(
                           color: Colors.black,
                         ),
                         Text(

@@ -32,7 +32,7 @@ class FilterPage extends StatelessWidget {
         backgroundColorEnd: const Color.fromRGBO(29, 38, 113, 1.0),
         title: const Text('Filters'),
         leading: IconButton(
-          icon: Icon(Icons.close),
+          icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context, false),
         ),
         actions: <Widget>[
