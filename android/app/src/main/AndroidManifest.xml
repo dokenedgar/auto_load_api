@@ -13,7 +13,7 @@
          -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="The Movie App"
+        android:label="Movie Trailers And Torrents"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
@@ -36,3 +36,6 @@
         </activity>
     </application>
 </manifest>
+
+
+

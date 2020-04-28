@@ -160,7 +160,7 @@ class _ApiListState extends State<ApiList> {
             backgroundColorStart: const Color.fromRGBO(195, 55, 100, 1.0),
             backgroundColorEnd: const Color.fromRGBO(29, 38, 113, 1.0),
 
-            title: const Text('Lock-down Movies'),
+            title: const Text('Movie Trailers & Torrents'),
             actions: <Widget>[
               if (error)
                 IconButton(
