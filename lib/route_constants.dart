@@ -13,7 +13,8 @@ Route<void> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case AppRoutes.homeRoute:
       return MaterialPageRoute<void>(
-          builder: (BuildContext context) => ApiList());
+        builder: (BuildContext context) => ApiList(),
+      );
 
     case AppRoutes.movieDetailRoute:
       return MaterialPageRoute<void>(
@@ -27,6 +28,7 @@ Route<void> generateRoute(RouteSettings settings) {
 
     default:
       return MaterialPageRoute<void>(
-          builder: (BuildContext context) => ApiList());
+        builder: (BuildContext context) => ApiList(),
+      );
   }
 }

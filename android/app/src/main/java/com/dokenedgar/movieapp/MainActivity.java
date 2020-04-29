@@ -1,4 +1,5 @@
-package com.example.auto_load_api;
+// package com.example.auto_load_api;
+package com.dokenedgar.movieapp;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

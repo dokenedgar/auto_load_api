@@ -13,12 +13,15 @@ dependencies:
   cupertino_icons: ^0.1.2
   built_value: ^6.7.1
   built_collection: ^4.2.2
-  flutter_youtube: ^1.1.6
+  flutter_youtube: ^2.0.0
   url_launcher: ^5.1.2
   redux: ^3.0.0
   flutter_redux: ^0.5.3
-  rxdart: any
+  rxdart: ^0.22.6
   gradient_app_bar: ^0.0.1
+  connectivity: ^0.4.8+2
+  flutter_launcher_icons: ^0.7.5
+  flutter_launcher_name: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +31,14 @@ dev_dependencies:
   mockito: ^4.1.1
   test: ^1.9.4
   test_coverage: ^0.4.1
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
+
+flutter_launcher_name:
+  name: "Movie Trailers And Torrents"
 
 flutter:
   uses-material-design: true

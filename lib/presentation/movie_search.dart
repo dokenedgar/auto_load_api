@@ -437,8 +437,16 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
         routeName = '';
         break;
       case TargetPlatform.android:
+        break;
       case TargetPlatform.fuchsia:
         routeName = searchFieldLabel;
+        break;
+      case TargetPlatform.linux:
+        break;
+      case TargetPlatform.macOS:
+        break;
+      case TargetPlatform.windows:
+        break;
     }
 
     return Semantics(
@@ -456,7 +464,7 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
           title: TextField(
             controller: widget.delegate._queryTextController,
             focusNode: focusNode,
-            style: theme.textTheme.title,
+            style: theme.textTheme.headline6,
             textInputAction: TextInputAction.search,
             onSubmitted: (String _) {
               widget.delegate.showResults(context);
