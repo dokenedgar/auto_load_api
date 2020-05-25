@@ -1,7 +1,8 @@
 name: auto_load_api
 description: A new Flutter application.
 
-version: 1.0.0+1
+version: 2.0.2
+versionCode: 2
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -22,6 +23,7 @@ dependencies:
   connectivity: ^0.4.8+2
   flutter_launcher_icons: ^0.7.5
   flutter_launcher_name: ^0.0.1
+  in_app_purchase: ^0.3.3+1
 
 dev_dependencies:
   flutter_test:

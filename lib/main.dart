@@ -7,6 +7,7 @@ import 'package:auto_load_api/reducers/movie_reducer.dart';
 import 'package:auto_load_api/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:redux/redux.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -29,6 +30,7 @@ void main() {
     middleware: middleware.items,
   );
 
+  InAppPurchaseConnection.enablePendingPurchases();
   runApp(BaseWidget(
     store: store,
     actionStream: actionController.stream,
@@ -53,7 +55,7 @@ class BaseWidget extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: router.generateRoute,
-          initialRoute: router.AppRoutes.homeRoute,
+          initialRoute: router.AppRoutes.homeRoute, //in the routes page change PurchasePage back to ApiList()
         ),
       ),
     );

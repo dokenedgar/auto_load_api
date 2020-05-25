@@ -1,3 +1,4 @@
+import 'package:auto_load_api/iap_page.dart';
 import 'package:auto_load_api/presentation/load_initial_movies.dart';
 import 'package:auto_load_api/presentation/movie_detail.dart';
 import 'package:auto_load_api/presentation/movie_trailer.dart';
@@ -13,7 +14,7 @@ Route<void> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case AppRoutes.homeRoute:
       return MaterialPageRoute<void>(
-        builder: (BuildContext context) => ApiList(),
+        builder: (BuildContext context) => PurchasePage(),//ApiList(),
       );
 
     case AppRoutes.movieDetailRoute:
